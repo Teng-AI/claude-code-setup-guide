@@ -188,19 +188,19 @@ When the task is complete, move the directory from `plans/active/` to `plans/com
 
 ## Example Usage
 
-**User**: "Add a calling phase timer that auto-passes after 30 seconds"
+**User**: "Add a webhook handler that retries failed deliveries"
 
 **Before `/pre-implement`** (what NOT to do):
-- Jump in and start coding the timer
-- Discover Firebase sync issues mid-implementation
+- Jump in and start coding the retry logic
+- Discover race conditions with concurrent deliveries mid-implementation
 - Spend hours debugging
 - Revert everything
 
 **After `/pre-implement`** (correct approach):
-1. Research Firebase Realtime Database update semantics
-2. Discover that `update()` merges nested objects
-3. Design state management to handle this
-4. Write test for "when timer expires, pendingCalls should clear"
+1. Research the webhook provider's retry semantics and idempotency guarantees
+2. Discover that duplicate deliveries are possible during retries
+3. Design state management with idempotency keys to handle this
+4. Write test for "when delivery fails, retry queue should process in order"
 5. THEN implement
 
 ## Key Principle
