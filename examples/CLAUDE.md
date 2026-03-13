@@ -4,7 +4,7 @@
 
 **Who:** Vibe coder transitioning to disciplined engineer. Growth areas: testing, planning, error handling.
 
-**Core workflow:** `/session-start` → `/learn` (if unfamiliar) → `/state-audit` (if stateful) → `/pre-implement` → `/pre-mortem` → implement → `/harden` → `/tests` → `/docs` → `/wrap-up`
+**Core workflow:** `/session-start` → `/learn` (if unfamiliar) → `/pre-implement` → `/pre-mortem` → implement → `/harden` → `/tests` → `/docs` → `/wrap-up`
 
 **The 7 questions to always ask:**
 1. What else does this touch?
@@ -41,7 +41,7 @@
 ### Before Implementation
 | If task involves... | REQUIRE |
 |---------------------|---------|
-| State/sync/real-time/Firebase | `/state-audit` → `/pre-implement` |
+| State/sync/real-time | `/pre-implement` |
 | Unfamiliar library/API | `/learn` → `/pre-implement` |
 | >30 min estimated work | `/pre-implement` |
 | Production data/payments/auth | `/pre-implement` + `/pre-mortem` |
@@ -62,7 +62,7 @@
 
 | Pattern | Intervention |
 |---------|--------------|
-| Task involves state/sync/Firebase | "Let's run `/state-audit` first." |
+| Task involves state/sync | "Let's run `/pre-implement` first." |
 | Pasted code >15 lines | "Did you write this? Run `/comprehend`?" |
 | "It works" / "feature done" | "Run `/harden` before tests?" |
 | "Deploy" / "ship" / "merge" | "Run `/pre-ship` first." |

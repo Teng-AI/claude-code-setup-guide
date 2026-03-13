@@ -28,7 +28,7 @@ If these weren't run, stop and run them now.
 
 ## The Pre-Implementation Checklist
 
-### Phase 1: Understand the Problem (The 7 Questions)
+### Phase 1: Understand the Problem
 
 Before writing any code, answer these questions:
 
@@ -97,7 +97,7 @@ Before writing any code, answer these questions:
     - [ ] Does this align with existing patterns in the codebase?
     - [ ] Is this the simplest solution that works?
     - [ ] Are there any obvious issues?
-    - [ ] Did we answer all 7 self-check questions?
+    - [ ] Did we answer all the self-check questions?
 
 12. **Get confirmation**
     - [ ] Present the plan to the user
