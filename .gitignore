@@ -1,0 +1,10 @@
+# OS files
+.DS_Store
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Node
+node_modules/
