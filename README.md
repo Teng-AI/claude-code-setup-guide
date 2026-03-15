@@ -38,7 +38,7 @@ Run `./install.sh --help` for all options.
 | Feature | Starter Pack | Full Setup |
 |---------|-------------|------------|
 | **Skills** | 8 core skills ([details](docs/03-skills.md)) | All skills ([details](docs/03-skills.md)) |
-| **Hooks** | -- | Pre-commit, post-tool, notification hooks |
+| **Hooks** | -- | Pre-commit, post-tool, deploy gate, prompt-based workflow gates |
 | **Memory system** | -- | learnings.md tracking, session state persistence |
 | **Templates** | -- | PR templates, reference docs |
 | **Best for** | Getting started, trying out skills | Full workflow adoption across projects |

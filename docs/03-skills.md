@@ -92,6 +92,8 @@ You can write a `SKILL.md` from scratch, or use the `/skill-creator` skill to ge
 
 **Test incrementally.** Invoke your skill a few times and refine the wording based on what Claude produces. Small changes to phrasing can significantly change output quality.
 
+**Add a "Next Step" section.** End each skill with a concrete handoff that tells Claude which skill to suggest next. This creates automatic chaining so the user does not need to remember the workflow sequence. For example, `/harden` ends with "Next Step: Run `/tests` to cover the error handling added above."
+
 ---
 
 ## Skills Catalog
@@ -117,6 +119,7 @@ All skills organized by workflow phase.
 | `/pre-implement` | Pre-implementation planning with the 7 questions, state management analysis, and trade-offs. | Before any non-trivial feature. | Beginner |
 | `/pre-mortem` | Imagine the solution already failed and surface risks before they happen. | For high-stakes features (payments, auth, production data). | Intermediate |
 | `/learn` | Research an unfamiliar domain or library before building with it. | Before using a new API or framework. | Intermediate |
+| `/state-audit` | Audit state management before implementing. Prevents sync bugs. | Before any feature involving state, real-time data, or Firebase. | Intermediate |
 
 ---
 

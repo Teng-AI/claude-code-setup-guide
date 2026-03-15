@@ -2,9 +2,9 @@
 
 ## TL;DR
 
-**Who:** Vibe coder transitioning to disciplined engineer. Growth areas: testing, planning, error handling.
+**Who:** [YOUR ROLE]. Growth areas: [YOUR GROWTH AREAS].
 
-**Core workflow:** `/session-start` → `/learn` (if unfamiliar) → `/pre-implement` → `/pre-mortem` → implement → `/harden` → `/tests` → `/docs` → `/wrap-up`
+**Core workflow:** `/session-start` → `/learn` (if unfamiliar) → `/state-audit` (if stateful) → `/pre-implement` → `/pre-mortem` → implement → `/harden` → `/tests` → `/docs` → `/wrap-up`
 
 **The 7 questions to always ask:**
 1. What else does this touch?
@@ -26,8 +26,8 @@
 - **Name:** [YOUR NAME]
 - **Background:** [YOUR BACKGROUND], [YOUR EXPERIENCE]
 - **Location:** [YOUR LOCATION]
-- **Strengths:** Fast iteration, documentation, AI-augmented workflow
-- **Growth Areas:** Test coverage, upfront planning, error handling
+- **Strengths:** [YOUR STRENGTHS]
+- **Growth Areas:** [YOUR GROWTH AREAS]
 
 ### Active Projects
 - **[project-1]:** [description]
@@ -36,45 +36,13 @@
 
 ---
 
-## Workflow Gates (Enforced)
+## Automation
 
-### Before Implementation
-| If task involves... | REQUIRE |
-|---------------------|---------|
-| State/sync/real-time | `/pre-implement` |
-| Unfamiliar library/API | `/learn` → `/pre-implement` |
-| >30 min estimated work | `/pre-implement` |
-| Production data/payments/auth | `/pre-implement` + `/pre-mortem` |
-
-### After Feature Works
-| If feature has... | REQUIRE |
-|-------------------|---------|
-| External APIs, user input, DB writes, network | `/harden` |
-
-### Before Deploy
-| Always | `/pre-ship` |
+Workflow is enforced by hooks in `settings.json` and skill chaining. Follow the "Next Step" at the bottom of each skill output. If a hook fires a warning, follow its guidance.
 
 ---
 
 ## Default Behaviors
-
-### Pattern Detection (Intervene Immediately)
-
-| Pattern | Intervention |
-|---------|--------------|
-| Task involves state/sync | "Let's run `/pre-implement` first." |
-| Pasted code >15 lines | "Did you write this? Run `/comprehend`?" |
-| "It works" / "feature done" | "Run `/harden` before tests?" |
-| "Deploy" / "ship" / "merge" | "Run `/pre-ship` first." |
-| 3+ changes without hypothesis | "Pause. What's your hypothesis?" |
-| Wants to skip required skill | Use Skip Protocol |
-| Bug report / failing test | Investigate autonomously (read logs, trace code, form hypothesis). Fix directly if < 5 lines and localized. For anything larger, present hypothesis + proposed fix before changing code. |
-
-### Skip Protocol
-1. State risk: "Skipping X risks the [YOUR PAST MISTAKE] pattern."
-2. Require justification: "What makes this safe to skip?"
-3. If justified, track it for wrap-up
-4. Flag at session end
 
 ### When Debugging
 - Before ANY change: "What's your hypothesis?"
@@ -88,11 +56,9 @@
 - Check separation of concerns
 - Check state management
 
-### Guardrails
-- Complex task without planning → push back, reference [YOUR PAST MISTAKE]
-- Happy path only → ask about failure cases
-- Skip error handling → ask "what if X fails?"
-- Multiple debug changes → enforce one at a time
+### Context-Specific
+- Pasted code >15 lines → "Did you write this? Run `/comprehend`?"
+- Bug report / failing test → Investigate autonomously (read logs, trace code, form hypothesis). Fix directly if < 5 lines and localized. For anything larger, present hypothesis + proposed fix before changing code.
 
 ---
 
@@ -150,6 +116,7 @@ New projects need:
 - [ ] `ROADMAP.md` or `FUTURE_FEATURES.md`
 - [ ] `CHANGELOG.md`
 - [ ] GitHub Actions CI
+- [ ] Hookify rules (copy from `~/.claude/templates/hookify/`)
 
 ## Git Workflow
 

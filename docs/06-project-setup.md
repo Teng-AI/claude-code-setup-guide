@@ -119,6 +119,31 @@ When writing references, lead with the gotchas, include code examples for tricky
 
 Create a `.md` file in `~/.claude/references/` named after the technology (e.g., `stripe-webhooks.md`). Focus on gotchas, common errors, and patterns -- assume Claude already knows the basics.
 
+## Project-Level Hooks
+
+Some workflow reminders only make sense in specific projects. For example, a Firebase/state-audit reminder would be noisy in a project that does not use Firebase. Place these in `{project}/.claude/settings.json` instead of the global settings.
+
+Example: a project-level UserPromptSubmit hook that reminds about `/state-audit` when Firebase or sync keywords appear:
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "prompt=$(echo \"$USER_PROMPT\" | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'firebase|firestore|realtime|sync|real-time|websocket|state.?manag'; then echo 'State/sync work detected. Consider running /state-audit before implementing.'; fi; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Keep hookify rule templates in `~/.claude/templates/hookify/` and copy them into new projects during scaffolding.
+
 ## Project Setup Checklist
 
 - [ ] `.claude/CLAUDE.md` with project context (start here -- highest impact)
@@ -127,5 +152,6 @@ Create a `.md` file in `~/.claude/references/` named after the technology (e.g.,
 - [ ] `ROADMAP.md` or `FUTURE_FEATURES.md` for priorities
 - [ ] `CHANGELOG.md` for notable changes
 - [ ] GitHub Actions CI for tests, linting, and builds
+- [ ] Project-level hooks copied from `~/.claude/templates/hookify/` (if applicable)
 
 Start with `CLAUDE.md` and `learnings.md`, then add the rest as the project matures.

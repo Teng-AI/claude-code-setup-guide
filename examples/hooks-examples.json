@@ -6,11 +6,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cmd=$(echo \"$TOOL_INPUT\" | jq -r '.command // \"\"'); if echo \"$cmd\" | grep -qE 'git commit|git push'; then staged=$(git diff --cached --name-only 2>/dev/null); if [ -n \"$staged\" ]; then echo 'Reminder: Run /docs to sync documentation before committing'; fi; fi; exit 0"
+            "command": "cmd=$(echo \"$TOOL_INPUT\" | jq -r '.command // \"\"'); if echo \"$cmd\" | grep -qE 'git commit|git push'; then staged=$(git diff --cached --name-only 2>/dev/null); if [ -n \"$staged\" ]; then echo 'Reminder: Run /harden, /tests, and /docs before committing if you have not already.'; fi; fi; exit 0"
           },
           {
             "type": "command",
             "command": "cmd=$(echo \"$TOOL_INPUT\" | jq -r '.command // \"\"'); if echo \"$cmd\" | grep -qE 'git push.*(main|master)|git push -f|git push --force'; then echo 'Blocked: cannot push directly to main/master or force push. Use a feature branch and PR.'; exit 2; fi; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "cmd=$(echo \"$TOOL_INPUT\" | jq -r '.command // \"\"'); if echo \"$cmd\" | grep -qiE 'vercel deploy|netlify deploy|firebase deploy|npm run deploy|fly deploy'; then echo 'Deploy detected. Run /pre-ship first if you have not already.'; fi; exit 0"
           }
         ]
       }
@@ -22,6 +26,24 @@
           {
             "type": "command",
             "command": "cmd=$(echo \"$TOOL_INPUT\" | jq -r '.command // \"\"'); result=$(echo \"$TOOL_RESULT\" | head -c 500); if echo \"$result\" | grep -qiE 'error|failed|exception|FAILED'; then echo 'Error detected. Consider running /debug for systematic troubleshooting.'; fi; exit 0"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "prompt=$(echo \"$USER_PROMPT\" | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'payment|billing|stripe|auth(entication)?|login|signup|password|prod(uction)?.?data|migration'; then echo 'High-stakes task detected. Consider running /pre-implement + /pre-mortem before coding.'; fi; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "prompt=$(echo \"$USER_PROMPT\" | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'never used|first time|unfamiliar|new to|don.t know how|haven.t worked with'; then echo 'Unfamiliar territory detected. Consider running /learn before implementing.'; fi; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "prompt=$(echo \"$USER_PROMPT\" | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'still (not|broken|failing)|same error|tried everything|going in circles'; then echo 'Debugging loop detected. Consider running /fresh-eyes for a reset.'; fi; exit 0"
           }
         ]
       }

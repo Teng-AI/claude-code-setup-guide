@@ -129,6 +129,8 @@ Commit: feat: add user notification system with preferences UI
 ## Key Takeaways
 
 - Each skill builds on the previous one. Learning notes inform the plan, the plan shapes implementation, hardening catches gaps, tests verify hardened code, pre-ship catches operational concerns.
+- **Skill chaining makes this automatic.** Each skill ends with a "Next Step" section that suggests the next skill in the workflow. You do not need to memorize the sequence -- just follow the handoff.
+- **Hooks catch what you forget.** If you type "firebase deploy" without running `/pre-ship`, a hook fires a reminder. If you mention "never used this API before," a hook suggests `/learn`. The system guides you even when you are not thinking about process.
 - You do not need every skill every time. A quick bug fix might only need `/session-start` and `/wrap-up`. Match rigor to risk.
 - The workflow prevents the most common engineering mistakes: shipping without planning, skipping error handling, deploying without checks.
 - Start with `/session-start`, `/pre-implement`, and `/wrap-up`. Add `/harden` and `/tests` once those are habitual. Build incrementally.
