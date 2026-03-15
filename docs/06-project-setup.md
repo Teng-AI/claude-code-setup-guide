@@ -121,9 +121,9 @@ Create a `.md` file in `~/.claude/references/` named after the technology (e.g.,
 
 ## Project-Level Hooks
 
-Some workflow reminders only make sense in specific projects. For example, a Firebase/state-audit reminder would be noisy in a project that does not use Firebase. Place these in `{project}/.claude/settings.json` instead of the global settings.
+Some workflow reminders only make sense in specific projects. For example, a Firebase-specific reminder would be noisy in a project that does not use Firebase. Place these in `{project}/.claude/settings.json` instead of the global settings.
 
-Example: a project-level UserPromptSubmit hook that reminds about `/state-audit` when Firebase or sync keywords appear:
+Example: a project-level UserPromptSubmit hook that reminds about planning when Firebase or sync keywords appear:
 
 ```json
 {
@@ -133,7 +133,7 @@ Example: a project-level UserPromptSubmit hook that reminds about `/state-audit`
         "hooks": [
           {
             "type": "command",
-            "command": "prompt=$(echo \"$USER_PROMPT\" | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'firebase|firestore|realtime|sync|real-time|websocket|state.?manag'; then echo 'State/sync work detected. Consider running /state-audit before implementing.'; fi; exit 0"
+            "command": "prompt=$(echo \"$USER_PROMPT\" | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'firebase|firestore|realtime|sync|real-time|websocket|state.?manag'; then echo 'State/sync work detected. Consider running /pre-implement before coding.'; fi; exit 0"
           }
         ]
       }

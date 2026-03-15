@@ -119,7 +119,6 @@ All skills organized by workflow phase.
 | `/pre-implement` | Pre-implementation planning with the 7 questions, state management analysis, and trade-offs. | Before any non-trivial feature. | Beginner |
 | `/pre-mortem` | Imagine the solution already failed and surface risks before they happen. | For high-stakes features (payments, auth, production data). | Intermediate |
 | `/learn` | Research an unfamiliar domain or library before building with it. | Before using a new API or framework. | Intermediate |
-| `/state-audit` | Audit state management before implementing. Prevents sync bugs. | Before any feature involving state, real-time data, or Firebase. | Intermediate |
 
 ---
 

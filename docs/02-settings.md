@@ -19,7 +19,7 @@ The split exists so you can share your general configuration while keeping permi
 | `alwaysThinkingEnabled` | boolean | Forces extended thinking on every response. Reduces errors on complex tasks at the cost of longer responses. | Yes |
 | `hooks` | object | Run shell commands before/after Claude uses a tool. See [Hooks](04-hooks.md). | No |
 | `autoUpdatesChannel` | string | Release channel: `"latest"` (stable), `"beta"` (pre-release), `"disabled"` (manual). | No |
-| `skipDangerousModePermissionPrompt` | boolean | Skip confirmation before potentially destructive commands. Only enable once you trust your permission lists. | No |
+| `skipDangerousModePermissionPrompt` | boolean | Skip confirmation before potentially destructive commands. **This is the single biggest quality-of-life setting** -- once you trust your allow/deny lists, flipping this to `true` eliminates most approval prompts and lets you work uninterrupted. Start with `false`, switch to `true` after a few sessions. | No |
 | `voiceEnabled` | boolean | Enables voice input for speaking to Claude instead of typing. | No |
 
 Settings marked "Starter? Yes" are the only two you need when first setting up. Add others as you discover what you need.

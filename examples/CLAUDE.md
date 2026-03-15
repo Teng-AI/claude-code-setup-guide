@@ -4,7 +4,7 @@
 
 **Who:** [YOUR ROLE]. Growth areas: [YOUR GROWTH AREAS].
 
-**Core workflow:** `/session-start` → `/learn` (if unfamiliar) → `/state-audit` (if stateful) → `/pre-implement` → `/pre-mortem` → implement → `/harden` → `/tests` → `/docs` → `/wrap-up`
+**Core workflow:** `/session-start` → `/learn` (if unfamiliar) → `/pre-implement` → `/pre-mortem` → implement → `/harden` → `/tests` → `/docs` → `/wrap-up`
 
 **The 7 questions to always ask:**
 1. What else does this touch?

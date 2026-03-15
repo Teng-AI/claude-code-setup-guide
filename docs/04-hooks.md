@@ -84,7 +84,7 @@ Any output your hook prints to stdout is shown to Claude as feedback.
 
 **Global hooks** (`~/.claude/settings.json`) fire on every project. Use these for universal rules that always apply: blocking force pushes, reminding about docs before commits, detecting errors, surfacing workflow suggestions.
 
-**Project-level hooks** (`{project}/.claude/settings.json`) fire only in that project. Use these for domain-specific rules: Firebase/state-audit reminders in a Firebase project, specific linting in a particular codebase.
+**Project-level hooks** (`{project}/.claude/settings.json`) fire only in that project. Use these for domain-specific rules: Firebase planning reminders in a Firebase project, specific linting in a particular codebase.
 
 **Rule of thumb:** If a hook would be noisy in most projects (e.g., triggering on common words like "sync" or "state"), make it project-level.
 
@@ -236,14 +236,14 @@ Catches frustration signals and suggests `/fresh-eyes` to break out of a debuggi
 }
 ```
 
-**Domain-specific reminder (project-level):** For a Firebase project, add a state-audit reminder that only fires in that project.
+**Domain-specific reminder (project-level):** For a Firebase project, add a reminder that only fires in that project.
 
 ```json
 {
   "hooks": [
     {
       "type": "command",
-      "command": "prompt=$(echo \"$USER_PROMPT\" | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'firebase|firestore|realtime|sync|real-time|websocket|state.?manag'; then echo 'State/sync work detected. Consider running /state-audit before implementing.'; fi; exit 0"
+      "command": "prompt=$(echo \"$USER_PROMPT\" | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'firebase|firestore|realtime|sync|real-time|websocket|state.?manag'; then echo 'State/sync work detected. Consider running /pre-implement before coding.'; fi; exit 0"
     }
   ]
 }

@@ -300,23 +300,10 @@ install_settings() {
         log_ok "settings.json"
     fi
 
-    # Warn about skipDangerousModePermissionPrompt
-    if command -v jq &>/dev/null; then
-        local skip_dangerous
-        skip_dangerous="$(jq -r '.skipDangerousModePermissionPrompt // false' "$SETTINGS_SRC" 2>/dev/null)"
-        if [ "$skip_dangerous" = "true" ]; then
-            echo ""
-            log_warn "The installed settings.json has 'skipDangerousModePermissionPrompt' set to true."
-            log_warn "This disables safety prompts for dangerous operations (file deletion, etc.)."
-            log_warn "If you are new to Claude Code, consider setting it to false in:"
-            log_warn "  $CLAUDE_DIR/settings.json"
-        fi
-    else
-        echo ""
-        log_warn "Could not check settings for risky options (jq not installed)."
-        log_warn "Review $CLAUDE_DIR/settings.json and consider disabling"
-        log_warn "'skipDangerousModePermissionPrompt' if you are new to Claude Code."
-    fi
+    # Tip about skipDangerousModePermissionPrompt
+    echo ""
+    log_info "Tip: Once you trust your permission lists, set 'skipDangerousModePermissionPrompt'"
+    log_info "to true in $CLAUDE_DIR/settings.json for a faster workflow."
 }
 
 install_full() {
