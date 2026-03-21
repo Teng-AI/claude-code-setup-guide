@@ -181,7 +181,7 @@ After hardening, document what was added:
 - [x] Double-click prevention on submit
 
 ### Ready for Testing
-- [ ] Run `/tests` to cover these cases
+- [ ] Run `/test-gaps` to cover these cases
 ```
 
 ## Common Hardening Patterns
@@ -241,7 +241,7 @@ Implement feature (happy path)
     ↓
 /harden → Adds error handling for failure modes (THIS SKILL)
     ↓
-/tests → Tests both happy path AND failure cases
+/test-gaps → Tests both happy path AND failure cases
 ```
 
 ## When to Skip

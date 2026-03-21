@@ -1,9 +1,9 @@
 ---
-name: tests
+name: test-gaps
 description: Analyze test coverage gaps and write missing tests
 ---
 
-# /tests - Test Coverage Analysis and Generation
+# /test-gaps - Test Coverage Analysis and Generation
 
 When invoked, analyze the codebase for test coverage gaps and write missing tests.
 

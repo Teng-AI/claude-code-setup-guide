@@ -42,7 +42,7 @@ Review the session for workflow gates that should have been triggered:
 
 - Was an unfamiliar library used? Was `/learn` run?
 - Was error handling addressed? Was `/harden` run?
-- Were docs updated? Was `/docs` run?
+- Were docs updated? Was `/docs-sync` run?
 - Is this going to production? Was `/pre-ship` run?
 
 For each skipped skill:

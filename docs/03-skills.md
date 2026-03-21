@@ -92,7 +92,7 @@ You can write a `SKILL.md` from scratch, or use the `/skill-creator` skill to ge
 
 **Test incrementally.** Invoke your skill a few times and refine the wording based on what Claude produces. Small changes to phrasing can significantly change output quality.
 
-**Add a "Next Step" section.** End each skill with a concrete handoff that tells Claude which skill to suggest next. This creates automatic chaining so the user does not need to remember the workflow sequence. For example, `/harden` ends with "Next Step: Run `/tests` to cover the error handling added above."
+**Add a "Next Step" section.** End each skill with a concrete handoff that tells Claude which skill to suggest next. This creates automatic chaining so the user does not need to remember the workflow sequence. For example, `/harden` ends with "Next Step: Run `/test-gaps` to cover the error handling added above."
 
 ---
 
@@ -136,7 +136,7 @@ All skills organized by workflow phase.
 
 | Skill | Description | When to Use | Level |
 |-------|-------------|-------------|-------|
-| `/tests` | Analyze test coverage gaps and write missing tests. | After implementation. | Beginner |
+| `/test-gaps` | Analyze test coverage gaps and write missing tests. | After implementation. | Beginner |
 | `/code-reviewer` | Review code for correctness, security, and performance. | Before committing. | Intermediate |
 | `/debug` | Structured, hypothesis-driven debugging workflow. | When something breaks. | Beginner |
 | `/fresh-eyes` | Reset perspective when stuck in a debugging rabbit hole. | After 3 or more failed debug attempts. | Intermediate |
@@ -148,7 +148,7 @@ All skills organized by workflow phase.
 | Skill | Description | When to Use | Level |
 |-------|-------------|-------------|-------|
 | `/pre-ship` | Production readiness checklist. | Before deploying. | Intermediate |
-| `/docs` | Sync documentation with code changes. | Before committing. | Beginner |
+| `/docs-sync` | Sync documentation with code changes. | Before committing. | Beginner |
 | `/git-workflow` | Standard git operations with conventional commits. | For all git work. | Beginner |
 | `/nextjs-deploy` | Next.js preview and deploy workflow. | When deploying Next.js apps. | Advanced |
 
@@ -170,14 +170,14 @@ All skills organized by workflow phase.
 | `/prompt-refiner` | Improve and optimize prompts. | When a prompt is not producing good results. | Advanced |
 | `/humanizer` | Remove signs of AI-generated writing. | When polishing content for publication. | Advanced |
 | `/ralph-prep` | Optimize prompts for Ralph Loop autonomous iteration. | When setting up autonomous workflows. | Advanced |
-| `/roadmap` | Quick view of active priorities across projects. | When planning what to work on next. | Intermediate |
+| `/project-roadmap` | Quick view of active priorities across projects. | When planning what to work on next. | Intermediate |
 | `/business-thought-partner` | Strategic business advisor for product and business decisions. | When making business strategy decisions. | Advanced |
 
 ---
 
 ## Recommended Learning Path
 
-**Stage 1: Starter Pack** -- session-start, pre-implement, harden, tests, debug, docs, git-workflow, wrap-up
+**Stage 1: Starter Pack** -- session-start, pre-implement, harden, test-gaps, debug, docs-sync, git-workflow, wrap-up
 
 **Stage 2: Add Planning** -- pre-mortem, learn
 

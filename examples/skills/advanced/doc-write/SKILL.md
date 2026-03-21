@@ -1,6 +1,6 @@
 ---
 name: doc-write
-description: Write NEW documentation from scratch. Use when creating a README, API docs, or adding code comments. For syncing existing docs with code changes, use /docs instead.
+description: Write NEW documentation from scratch. Use when creating a README, API docs, or adding code comments. For syncing existing docs with code changes, use /docs-sync instead.
 ---
 
 # Write Documentation

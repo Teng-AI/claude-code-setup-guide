@@ -28,8 +28,8 @@ Before running this checklist, verify these were completed:
 |-------|----------------|------------|
 | `/pre-implement` | Task was non-trivial | [ ] |
 | `/harden` | Feature has external deps | [ ] |
-| `/tests` | Feature has logic | [ ] |
-| `/docs` | Files were changed | [ ] |
+| `/test-gaps` | Feature has logic | [ ] |
+| `/docs-sync` | Files were changed | [ ] |
 
 **If any required skills were skipped, note them below. They're risks.**
 
@@ -121,8 +121,8 @@ For thorough security review, run `/security-check`.
 |-------|--------|
 | /pre-implement | ✅ Completed |
 | /harden | ✅ Completed |
-| /tests | ✅ Completed |
-| /docs | ⚠️ Skipped (no doc changes needed) |
+| /test-gaps | ✅ Completed |
+| /docs-sync | ⚠️ Skipped (no doc changes needed) |
 
 ### Checklist Results
 
@@ -216,9 +216,9 @@ Development complete
     ↓
 /harden → Error handling added
     ↓
-/tests → Test coverage
+/test-gaps → Test coverage
     ↓
-/docs → Documentation synced
+/docs-sync → Documentation synced
     ↓
 /pre-ship (THIS SKILL) → Production readiness
     ↓

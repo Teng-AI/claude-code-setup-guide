@@ -1,9 +1,9 @@
 ---
-name: docs
+name: docs-sync
 description: Sync documentation with code changes
 ---
 
-# /docs - Documentation Sync
+# /docs-sync - Documentation Sync
 
 When invoked, ensure documentation matches the current state of the code. Update existing docs. Do not create new documentation unless there is a clear gap.
 

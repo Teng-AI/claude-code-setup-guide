@@ -245,6 +245,6 @@ For a fast check, focus on:
 
 | This Skill Found | Run Next |
 |------------------|----------|
-| Low test coverage | `/tests` |
+| Low test coverage | `/test-gaps` |
 | Complex implementation needed | `/pre-implement` |
-| Documentation gaps | `/docs` |
+| Documentation gaps | `/docs-sync` |

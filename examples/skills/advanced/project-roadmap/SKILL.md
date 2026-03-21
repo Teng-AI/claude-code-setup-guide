@@ -1,5 +1,5 @@
 ---
-name: roadmap
+name: project-roadmap
 description: Quick view of active priorities across all roadmaps. Shows what's in progress, what's next, and what's blocked.
 ---
 
@@ -33,7 +33,7 @@ Show ONLY items that are:
 
 Skip:
 - Items marked `Done`
-- Parking Lot / trigger-based items (unless user asks with `/roadmap all`)
+- Parking Lot / trigger-based items (unless user asks with `/project-roadmap all`)
 - Completed checkboxes `[x]`
 
 ### Step 3: Display Summary
@@ -68,5 +68,5 @@ Keep the recommendation to 1-2 sentences.
 
 ## Arguments
 
-- `/roadmap` -- Show active items only (default)
-- `/roadmap all` -- Include parking lot and completed items
+- `/project-roadmap` -- Show active items only (default)
+- `/project-roadmap all` -- Include parking lot and completed items

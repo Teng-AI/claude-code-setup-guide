@@ -94,7 +94,7 @@ Any output your hook prints to stdout is shown to Claude as feedback.
 
 ### 1. Commit Reminder (PreToolUse on Bash)
 
-Watches for `git commit` or `git push` and reminds you to run `/harden`, `/tests`, and `/docs` first. Always exits 0 so it never blocks -- it only surfaces a reminder when staged files exist.
+Watches for `git commit` or `git push` and reminds you to run `/harden`, `/test-gaps`, and `/docs-sync` first. Always exits 0 so it never blocks -- it only surfaces a reminder when staged files exist.
 
 ```json
 {
@@ -102,7 +102,7 @@ Watches for `git commit` or `git push` and reminds you to run `/harden`, `/tests
   "hooks": [
     {
       "type": "command",
-      "command": "cmd=$(echo \"$TOOL_INPUT\" | jq -r '.command // \"\"'); if echo \"$cmd\" | grep -qE 'git commit|git push'; then staged=$(git diff --cached --name-only 2>/dev/null); if [ -n \"$staged\" ]; then echo 'Reminder: Run /harden, /tests, and /docs before committing if you have not already.'; fi; fi; exit 0"
+      "command": "cmd=$(echo \"$TOOL_INPUT\" | jq -r '.command // \"\"'); if echo \"$cmd\" | grep -qE 'git commit|git push'; then staged=$(git diff --cached --name-only 2>/dev/null); if [ -n \"$staged\" ]; then echo 'Reminder: Run /harden, /test-gaps, and /docs-sync before committing if you have not already.'; fi; fi; exit 0"
     }
   ]
 }

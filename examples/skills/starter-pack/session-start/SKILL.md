@@ -154,7 +154,7 @@ This tells you:
 |---------------------|-----------|
 | `/pre-implement` | Starting a non-trivial task |
 | `/architecture-review` | Flags show missing protections |
-| `/tests` | Tests are sparse or failing |
+| `/test-gaps` | Tests are sparse or failing |
 
 ## Tips
 

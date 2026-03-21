@@ -73,7 +73,7 @@ This is where the happy-path prototype becomes production-worthy code.
 
 ## Step 6: Write Tests
 
-**Run:** `/tests`
+**Run:** `/test-gaps`
 
 ```
 Unit: NotificationService.test.ts (14 tests) -- send, retry, circuit breaker, rate limiting
@@ -87,7 +87,7 @@ Coverage: 89% on new code. Gap: circuit breaker half-open transition (noted in t
 
 ## Step 7: Sync Documentation
 
-**Run:** `/docs`
+**Run:** `/docs-sync`
 
 ```
 README.md: Added Notifications section, documented feature flag and env vars
@@ -118,7 +118,7 @@ Decision: GO with flags noted. Address monitoring before enabling for all users.
 
 ```
 Completed: User notification feature (ROADMAP.md item 1/3 for v1.2)
-Skills used: session-start, learn, pre-implement, harden, tests, docs, pre-ship (none skipped)
+Skills used: session-start, learn, pre-implement, harden, test-gaps, docs-sync, pre-ship (none skipped)
 Learnings added: Notification API returns 400 for missing template variables -- always validate first
 Follow-up: Alerting for circuit breaker, evaluate DB-backed queue default, push notifications (v1.3)
 Commit: feat: add user notification system with preferences UI
@@ -133,4 +133,4 @@ Commit: feat: add user notification system with preferences UI
 - **Hooks catch what you forget.** If you type "firebase deploy" without running `/pre-ship`, a hook fires a reminder. If you mention "never used this API before," a hook suggests `/learn`. The system guides you even when you are not thinking about process.
 - You do not need every skill every time. A quick bug fix might only need `/session-start` and `/wrap-up`. Match rigor to risk.
 - The workflow prevents the most common engineering mistakes: shipping without planning, skipping error handling, deploying without checks.
-- Start with `/session-start`, `/pre-implement`, and `/wrap-up`. Add `/harden` and `/tests` once those are habitual. Build incrementally.
+- Start with `/session-start`, `/pre-implement`, and `/wrap-up`. Add `/harden` and `/test-gaps` once those are habitual. Build incrementally.
