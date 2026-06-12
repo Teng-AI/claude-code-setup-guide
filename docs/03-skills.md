@@ -76,7 +76,7 @@ Project-level skills override global skills with the same name and are only avai
 
 ## How to Create Your Own
 
-You can write a `SKILL.md` from scratch, or use the `/skill-creator` skill to generate one interactively. The skill creator walks you through defining the name, description, and prompt body, then writes the file for you.
+You can write a `SKILL.md` from scratch, or use the `/create-skill` skill to generate one interactively. The skill creator walks you through defining the name, description, and prompt body, then writes the file for you.
 
 ## Best Practices
 
@@ -163,10 +163,10 @@ All skills organized by workflow phase.
 | `/performance-audit` | Performance analysis for web apps. | When investigating slow pages or interactions. | Advanced |
 | `/architecture-review` | Codebase health check and infrastructure maturity assessment. | During project planning or quarterly reviews. | Advanced |
 | `/design-review` | Visual design review covering hierarchy, typography, color, and layout. | When reviewing UI changes. | Advanced |
-| `/website-qa` | Website QA checker for links, responsive behavior, accessibility, and performance. | Before launching or after major UI changes. | Advanced |
+| `/qa` | QA test a web application — find bugs and fix them (diff-aware, full, or quick mode). | Before launching or after major UI changes. | Advanced |
 | `/doc-write` | Write new documentation from scratch. | When creating docs for a new feature or project. | Intermediate |
 | `/project-scaffolding` | Set up new projects with sensible defaults. | When starting a new project. | Intermediate |
-| `/skill-creator` | Create new Claude Code skills interactively. | When building a custom skill. | Advanced |
+| `/create-skill` | Create new Claude Code skills interactively. | When building a custom skill. | Advanced |
 | `/prompt-refiner` | Improve and optimize prompts. | When a prompt is not producing good results. | Advanced |
 | `/humanizer` | Remove signs of AI-generated writing. | When polishing content for publication. | Advanced |
 | `/ralph-prep` | Optimize prompts for Ralph Loop autonomous iteration. | When setting up autonomous workflows. | Advanced |
