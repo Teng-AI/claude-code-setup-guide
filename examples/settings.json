@@ -1,5 +1,5 @@
 {
-  "model": "claude-fable-5",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -27,15 +27,6 @@
           {
             "type": "command",
             "command": "cmd=$(echo \"$TOOL_INPUT\" | jq -r '.command // \"\"'); result=$(echo \"$TOOL_RESULT\" | head -c 500); if echo \"$result\" | grep -qiE 'error|failed|exception|FAILED'; then echo 'Error detected. Consider running /debug for systematic troubleshooting.'; fi; exit 0"
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '.tool_response.filePath // .tool_input.file_path // empty' | { read -r f; case \"$f\" in */memory/*) ;; *.md|*.pdf|*.html|*.txt|*.json|*.yaml|*.yml|*.py|*.js|*.ts|*.tsx|*.jsx|*.css) [ -f \"$f\" ] && open \"$f\" ;; esac; } 2>/dev/null; exit 0"
           }
         ]
       }
