@@ -63,6 +63,20 @@ Workflow is enforced by hooks in `settings.json` and skill chaining. Follow the 
 
 ---
 
+## Context Discipline
+
+- **Offload heavy reads.** Token-heavy work (many images, large files, multi-source research) → delegate to subagents; keep only their conclusions in the main thread. Don't pull 20+ images or whole large files into the main window.
+- **Files over chat.** Write deliverables (research, notes, decisions) to disk as you go. Don't let work live only in the conversation.
+- **Checkpoint before compaction.** Nearing the context limit mid-task → run `/checkpoint` (writes HANDOVER.md + commits) before `/compact`. Never compact with unsaved decisions. After a compact/resume, the SessionStart hook auto-surfaces HANDOVER.md.
+
+---
+
+## Compact instructions
+
+When compacting, preserve: exact file paths, open decisions, the current task's next concrete step, and any HANDOVER.md pointer. Drop resolved tangents and verbose tool output.
+
+---
+
 ## The 7 Questions (always ask before major changes)
 
 1. What else does this touch?
