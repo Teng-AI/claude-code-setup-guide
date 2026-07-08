@@ -4,7 +4,9 @@
 
 **Who:** [YOUR ROLE]. Growth areas: [YOUR GROWTH AREAS].
 
-**Core workflow:** `/session-start` → `/learn` (if unfamiliar) → `/state-audit` (if stateful) → `/pre-implement` → `/pre-mortem` → implement → `/harden` → `/test-gaps` → `/docs-sync` → `/wrap-up`
+**Code projects:** `/session-start` → `/learn` (if unfamiliar) → `/state-audit` (if stateful) → `/grill-me` (if requirements are fuzzy) → `/pre-implement` → `/pre-mortem` → implement → `/harden` → `/test-gaps` → `/docs-sync` → `/wrap-up`
+
+**Knowledge/ops work ([YOUR NON-CODE DOMAINS]):** `/grill-me` (if fuzzy) → do the work → `/checkpoint` as you go → `/wrap-up`
 
 **Golden rule:** The [YOUR PAST MISTAKE] happened when we skipped [STEP]. Don't skip [STEP].
 
@@ -36,7 +38,6 @@
 - Check separation of concerns and state management
 
 ### Context-Specific
-- Pasted code >15 lines → "Did you write this? Run `/comprehend`?"
 - Bug report / failing test → Investigate autonomously (read logs, trace code, form hypothesis). Fix directly if < 5 lines and localized. For anything larger, present hypothesis + proposed fix before changing code.
 
 ---
@@ -77,26 +78,14 @@ When compacting, preserve: exact file paths, open decisions, the current task's 
 
 ---
 
-## The 7 Questions (always ask before major changes)
-
-1. What else does this touch?
-2. What are 3 ways this could fail?
-3. Can I describe this in one sentence without "and"?
-4. What am I giving up with this approach?
-5. Where does state live? What changes it?
-6. What's my hypothesis?
-7. How quickly can I undo this?
-
----
-
 ## References (loaded on demand)
 
 See @references/learnings-format.md for learnings.md format and rules
 See @references/project-setup-checklist.md for new project setup
 See @references/git-workflow.md for branch strategy and commit conventions
-See @references/notion-api.md for Notion API direct calls (bypassing MCP limitations)
 See @references/tools.md for installed CLI tools (gws, gh, firebase, vercel, gcloud)
-See @references/cowork-skill-design.md for Co-Work token budgets, context management, and skill sizing
+Notion work: read `~/.claude/references/notion-api.md` first — direct API calls for block types, file uploads, views (lazy-loaded, not @-imported)
+Co-Work skill building: read `~/.claude/references/cowork-skill-design.md` first — token budgets, context management, skill sizing (lazy-loaded, not @-imported)
 <!-- plaud-skills:start -->
 Plaud MCP skills moved to `~/.claude/skills/plaud-*/SKILL.md` on 2026-06-11 (lazy-loaded). Start with `plaud-shared` for auth, tools, and error handling.
 <!-- plaud-skills:end -->
