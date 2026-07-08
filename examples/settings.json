@@ -49,6 +49,11 @@
             "type": "command",
             "command": "~/.claude/hooks/session-start.sh",
             "timeout": 10000
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/audit-reminder.sh",
+            "timeout": 5000
           }
         ]
       }
