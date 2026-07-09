@@ -22,6 +22,17 @@
     ],
     "PostToolUse": [
       {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/humanizer-check.sh",
+            "timeout": 10,
+            "statusMessage": "Checking for AI-writing tells"
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
