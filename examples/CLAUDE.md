@@ -50,6 +50,8 @@ Applies to ALL output: chat responses, documents, emails, commit messages, code 
 
 **Do:** Simple verbs, specific examples, varied sentence length, have opinions
 
+**Durable docs:** volatile state (counts of growing things, "currently at vX" mentions, statuses) stays out of prose. Link the live source (DB view, changelog), say it qualitatively ("the current batch"), or timestamp it ("36 rows as of Jul 10"). Stable facts (decisions, event dates, IDs, prices) and machine-checked contracts (spec versions, parameters) stay exact. Test: still true in 3 months if nobody edits it? One fact, one home; everywhere else links.
+
 ---
 
 ## Session Tracking
