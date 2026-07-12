@@ -1,5 +1,7 @@
 # Workflow Walkthrough: End-to-End Example
 
+> **Revision note (July 2026).** This walkthrough shows the full code-project chain. The live config it mirrors later archived most of these steps after a usage audit showed the work had shifted to knowledge/ops (see the notes in [Skills](03-skills.md) and [Hooks](04-hooks.md)). For a code-heavy project the chain below still applies as written.
+
 This walkthrough follows a realistic scenario from start to finish. The task: add a user notification feature to an existing Next.js project with user accounts. You need to integrate a notifications API, build a preferences UI, and wire it all together.
 
 ---

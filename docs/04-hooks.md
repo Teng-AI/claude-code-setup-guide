@@ -1,5 +1,7 @@
 # Hooks
 
+> **Revision note (July 2026).** The live config this guide mirrors was audited against 90 days of real transcripts. Five of the warn-only reminder hooks below (commit reminder, deploy reminder, error-string suggestion, and two of the prompt-keyword nudges) fired for months with near-zero conversion: the reminders were read and ignored. They were removed from the live config and survive here as construction examples. The lesson travels with them: warn-only hooks need periodic effectiveness checks (message fired vs. suggestion followed), or they decay into noise the user learns to skip. Blocking hooks (force-push guard) and acting hooks (prose check, pre-compaction save) all survived the same audit.
+
 ## What Are Hooks?
 
 Hooks are shell commands that execute automatically before or after Claude uses a tool, or when the user submits a prompt. They let you enforce rules, add reminders, and block dangerous operations without relying on Claude to remember every policy.

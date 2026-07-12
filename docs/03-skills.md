@@ -1,5 +1,7 @@
 # Skills
 
+> **Revision note (July 2026).** A transcript audit of the live config found the code-project chain skills below (/learn, /state-audit, /harden, /test-gaps, /docs-sync, /pre-ship, /debug, /fresh-eyes, /refactor, /pre-mortem) had zero to two uses in 90 days once the work shifted from code to knowledge/ops. They were archived with re-add triggers, and /pre-mortem was folded into /pre-implement as a required step. They remain documented here: the skills are sound for code-heavy work, and the meta-lesson is the point. Prune skills against measured usage, and archive rather than delete so a trigger can bring them back.
+
 ## What Are Skills?
 
 Skills are slash commands backed by `SKILL.md` prompt files. When you type `/skill-name` in a Claude Code conversation, Claude loads the corresponding `SKILL.md` file and follows its content as instructions.

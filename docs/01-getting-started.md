@@ -68,12 +68,12 @@ What each section does and why it exists:
 - **TL;DR** -- Quick reference summary so Claude can orient without reading the whole file. Include your identity, core workflow steps, and one "golden rule" anchored to a specific past mistake.
 - **Profile** -- Your experience level, strengths, and growth areas. Helps Claude calibrate how much to explain and where to push back harder.
 - **Active Projects** -- One-line descriptions of what you are working on. Gives Claude context for cross-project references.
-- **Automation** -- Short note that workflow is enforced by hooks in `settings.json` and skill chaining. Hooks handle the enforcement that CLAUDE.md tables used to handle manually. Each skill's "Next Step" section chains to the next skill in the workflow.
+- **Automation** -- Short note that hooks in `settings.json` guard and suggest, and skills chain via "Next Step" sections. (Earlier versions said hooks "enforce" the workflow; the audit showed warn-only hooks suggest at best.) Hooks handle the enforcement that CLAUDE.md tables used to handle manually. Each skill's "Next Step" section chains to the next skill in the workflow.
 - **Default Behaviors: Debugging** -- Rules like "one change at a time" and "state a hypothesis first" that prevent scatter-shot debugging.
 - **Default Behaviors: Review Mode** -- Sets the tone for code review (e.g., skeptical, not encouraging).
 - **Default Behaviors: Context-Specific** -- Situational interventions like suggesting `/comprehend` for pasted code or autonomous investigation for bug reports.
 - **Writing Style** -- Banned words and preferred style. Banning specific words is more effective than saying "write naturally."
-- **Session Tracking** -- Asks Claude to maintain a mental checklist of tasks, skills run, and debugging attempts during the session.
+- **Session Tracking** -- Asks Claude to maintain a mental checklist of tasks, skills run, and debugging attempts during the session. (Removed from the live config in July 2026: with no hook enforcing it, the section never changed behavior. Kept here as a cautionary example of instructions that read well but do nothing.)
 - **Learnings Log** -- Points Claude to `learnings.md` for persistent mistake tracking. See [Project Setup](06-project-setup.md) for format details.
 - **Project Setup Checklist** -- Standardizes how new projects are initialized. See [Project Setup](06-project-setup.md).
 - **Git Workflow** -- Branching strategy and commit rules. Prevents Claude from pushing to main or using non-standard commits.
