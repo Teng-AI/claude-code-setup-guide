@@ -4,11 +4,7 @@
 
 **Who:** [YOUR ROLE]. Growth areas: [YOUR GROWTH AREAS].
 
-**Code projects:** `/session-start` → `/learn` (if unfamiliar) → `/state-audit` (if stateful) → `/grill-me` (if requirements are fuzzy) → `/pre-implement` → `/pre-mortem` → implement → `/harden` → `/test-gaps` → `/docs-sync` → `/wrap-up`
-
-**Knowledge/ops work ([YOUR NON-CODE DOMAINS]):** `/grill-me` (if fuzzy) → do the work → `/checkpoint` as you go → `/wrap-up`
-
-**Golden rule:** The [YOUR PAST MISTAKE] happened when we skipped [STEP]. Don't skip [STEP].
+**Workflow:** `/grill-me` (if fuzzy) → do the work → `/checkpoint` as you go → `/wrap-up`. For anything non-trivial to build, run `/pre-implement` (includes the pre-mortem step) before building. The dormant code-project chain lives in `skills/_archive/` with re-add triggers; restore it when a real code project starts.
 
 **Dates:** Always check today's date from the system environment before writing dates. Don't assume the year.
 
@@ -30,7 +26,7 @@
 - Before ANY change: "What's your hypothesis?"
 - One change at a time
 - Revert failed attempts before trying next
-- After 3 failures: suggest `/fresh-eyes`
+- After 3 failures: stop, summarize what was tried, and propose a fundamentally different approach
 
 ### When Reviewing Code
 - Skeptical mode, not encouraging
@@ -54,15 +50,9 @@ Applies to ALL output: chat responses, documents, emails, commit messages, code 
 
 ---
 
-## Session Tracking
-
-Track throughout session: current task, skills run vs. skipped (with reasons), debugging attempts and hypotheses. Flag gaps at key transitions (feature done, commit, deploy, wrap-up).
-
----
-
 ## Automation
 
-Workflow is enforced by hooks in `settings.json` and skill chaining. Follow the "Next Step" at the bottom of each skill output. If a hook fires a warning, follow its guidance.
+Hooks in `settings.json` guard (force-push block, humanizer check) and suggest (high-stakes planning nudge); skills chain via the "Next Step" at the bottom of each skill output. Hooks suggest, they don't enforce. When a hook fires, weigh its guidance against the actual context.
 
 ---
 
@@ -88,6 +78,7 @@ See @references/git-workflow.md for branch strategy and commit conventions
 See @references/tools.md for installed CLI tools (gws, gh, firebase, vercel, gcloud)
 Notion work: read `~/.claude/references/notion-api.md` first — direct API calls for block types, file uploads, views (lazy-loaded, not @-imported)
 Co-Work skill building: read `~/.claude/references/cowork-skill-design.md` first — token budgets, context management, skill sizing (lazy-loaded, not @-imported)
+Memory system questions (what goes in which layer, consolidation): read `~/.claude/references/memory-system.md` (lazy-loaded, not @-imported)
 <!-- plaud-skills:start -->
 Plaud MCP skills moved to `~/.claude/skills/plaud-*/SKILL.md` on 2026-06-11 (lazy-loaded). Start with `plaud-shared` for auth, tools, and error handling.
 <!-- plaud-skills:end -->
