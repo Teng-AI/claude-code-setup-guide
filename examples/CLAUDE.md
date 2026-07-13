@@ -79,6 +79,3 @@ See @references/tools.md for installed CLI tools (gws, gh, firebase, vercel, gcl
 Notion work: read `~/.claude/references/notion-api.md` first — direct API calls for block types, file uploads, views (lazy-loaded, not @-imported)
 Co-Work skill building: read `~/.claude/references/cowork-skill-design.md` first — token budgets, context management, skill sizing (lazy-loaded, not @-imported)
 Memory system questions (what goes in which layer, consolidation): read `~/.claude/references/memory-system.md` (lazy-loaded, not @-imported)
-<!-- plaud-skills:start -->
-Plaud MCP skills moved to `~/.claude/skills/plaud-*/SKILL.md` on 2026-06-11 (lazy-loaded). Start with `plaud-shared` for auth, tools, and error handling.
-<!-- plaud-skills:end -->

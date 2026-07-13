@@ -83,11 +83,11 @@ Review code changes for correctness, readability, and potential bugs.
 ## Instructions
 - Focus on logic errors, not style preferences.
 - Flag any function longer than 50 lines.
-- Check that error cases are handled, not just the happy path.
+- Check that error cases are handled in addition to the happy path.
 - Return findings as a numbered list with file paths and line numbers.
 
 ## Model
-(optional) claude-sonnet-4-20250514
+(optional) sonnet
 ```
 
 | Section | Purpose |

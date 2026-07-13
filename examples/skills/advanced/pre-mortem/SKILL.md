@@ -1,125 +1,184 @@
 ---
 name: pre-mortem
-description: Imagine the solution already failed and surface risks
+description: Before implementing, imagine the solution already failed in production. Surfaces risks, assumptions, and failure modes while it's still cheap to change course.
 ---
 
-# /pre-mortem - Pre-Implementation Risk Analysis
+# Pre-Mortem Analysis
 
-When invoked, assume the feature has already been built and deployed -- and it caused a production incident. Work backwards to identify what went wrong.
-
-## Framing
-
-> "It's 2 weeks from now. This feature has caused a production incident. What went wrong?"
-
-This inversion is deliberate. It's easier to imagine specific failures than to generically "think about risks." A pre-mortem surfaces problems that optimism hides.
+Imagine it's 3 months from now. The feature shipped, and it failed badly. What went wrong?
 
 ## When to Use
 
-- Before touching production data or databases.
-- Before implementing payment or billing logic.
-- Before changing authentication or authorization.
-- Before any feature that handles sensitive user data.
-- Before a major architectural change.
-- Anytime the blast radius of a failure is high.
+Run `/pre-mortem` before:
+- Implementing anything that touches production data
+- Making architectural decisions that are hard to reverse
+- When a solution "feels too easy" (you're probably missing something)
+- After planning, but before coding
+- Before deploying significant changes
 
-## Steps
+## The Pre-Mortem Process
 
-### 1. List All Failure Modes
+### Step 1: State the Plan
 
-Brainstorm every way this could fail. Don't filter yet. Consider each category:
+Briefly describe what's about to be implemented:
+- What does it do?
+- How does it work?
+- What systems does it touch?
 
-**Technical failures:**
-- What if the database write partially fails?
-- What if a network request times out or returns an unexpected response?
-- What if concurrent users hit a race condition?
-- What if the data is malformed, too large, or missing required fields?
-- What if a third-party service goes down?
-- What if the migration fails halfway through?
+### Step 2: Imagine Failure
 
-**Data failures:**
-- What if existing data doesn't match the expected schema?
-- What if there are edge cases in production data that don't exist in test data?
-- What if a user has null/empty values where you expect data?
-- What if the data volume is 10x what you tested with?
+**The scenario**: It's 3 months later. This feature has caused a major incident. The team is in a post-mortem meeting.
 
-**User experience failures:**
-- What if the user double-clicks or submits twice?
-- What if the user navigates away mid-operation?
-- What if the user has stale data in their browser/app?
-- What if error messages expose internal details?
+Now work backwards: **What went wrong?**
 
-**Security failures:**
-- What if an unauthorized user accesses this endpoint?
-- What if input isn't sanitized?
-- What if tokens or secrets are logged or exposed?
-- What if rate limiting is missing?
+### Step 3: Identify Failure Modes
 
-**Operational failures:**
-- What if you need to roll back this change?
-- What if you need to fix data that was corrupted by this change?
-- What if monitoring doesn't catch the failure quickly?
+For each category, list specific ways this could fail:
 
-### 2. Rate Each Failure
+#### Data Integrity Failures
+- Could this corrupt or lose user data?
+- What happens if it runs twice accidentally?
+- What happens on partial completion?
+- Are there race conditions?
 
-For each failure mode, assess:
+#### External Dependency Failures
+- What if the API is slow (>5s response)?
+- What if the API is down?
+- What if the API returns unexpected data?
+- What if credentials expire?
 
-| Rating | Likelihood | Impact |
-|--------|-----------|--------|
-| High | Likely to happen within the first week | Data loss, security breach, financial impact |
-| Medium | Could happen under certain conditions | Degraded experience, manual intervention needed |
-| Low | Unlikely but possible | Minor inconvenience, easily recoverable |
+#### Scale Failures
+- What happens with 10x the expected load?
+- What happens with very large inputs?
+- What happens with many concurrent users?
 
-### 3. Identify Preventable Failures
+#### Edge Case Failures
+- What inputs haven't we considered?
+- What user behaviors are unexpected?
+- What timing issues could occur?
 
-For each failure rated Medium or High in either dimension:
-- Can this be prevented by code changes before deployment?
-- Can this be detected quickly with monitoring or alerts?
-- Can this be mitigated with a feature flag or rollback plan?
+#### Security Failures
+- Could this be exploited?
+- Does it expose sensitive data?
+- Are there injection risks?
 
-### 4. Add Mitigations
+#### Operational Failures
+- How would we know if this breaks?
+- Can we roll it back quickly?
+- Do we have logs to debug issues?
 
-For each preventable failure, specify the concrete mitigation:
+### Step 4: Assess Assumptions
 
-- **Validation**: input checking, schema validation, type guards.
-- **Error handling**: try/catch, retries with backoff, graceful degradation.
-- **Transactions**: database transactions, idempotency keys, compensation logic.
-- **Monitoring**: alerts on error rates, latency spikes, data anomalies.
-- **Rollback plan**: feature flags, database migration rollback scripts, manual data fix procedures.
-- **Testing**: specific test cases that exercise the failure mode.
+List every assumption the plan makes:
 
-### 5. Decide on Blockers
+| Assumption | What if it's wrong? | How to verify |
+|------------|---------------------|---------------|
+| [X is always true] | [Consequence] | [How to check] |
 
-Some risks are acceptable. Some are not. Decide:
-- **Blocker**: must be mitigated before shipping. (e.g., potential data loss, security vulnerability)
-- **Accept with monitoring**: ship it, but watch closely. (e.g., edge case that affects <1% of users)
-- **Accept**: risk is low enough to not warrant action. (e.g., cosmetic issue under rare conditions)
+### Step 5: Risk Matrix
+
+Rate each failure mode:
+
+| Failure Mode | Likelihood | Impact | Priority |
+|--------------|------------|--------|----------|
+| [Description] | Low/Med/High | Low/Med/High | P1/P2/P3 |
+
+Focus on High-Impact items, regardless of likelihood.
+
+### Step 6: Mitigation Plan
+
+For P1 and P2 risks, define mitigations:
+
+| Risk | Mitigation | When to Implement |
+|------|------------|-------------------|
+| [Risk] | [How to prevent/handle] | Before launch / Can defer |
 
 ## Output Format
 
-```
+```markdown
 ## Pre-Mortem: [Feature Name]
 
-### Failure Modes
-| # | Failure | Category | Likelihood | Impact | Decision |
-|---|---------|----------|-----------|--------|----------|
-| 1 | [description] | [technical/data/UX/security/ops] | H/M/L | H/M/L | blocker/monitor/accept |
+### The Plan
+[Brief description of what we're implementing]
 
-### Mitigations Required (Blockers)
-- [Failure #]: [specific mitigation to implement]
+### Failure Scenarios
 
-### Mitigations Recommended (Monitor)
-- [Failure #]: [monitoring or alerting to add]
+#### Most Likely Failures
+1. [Failure mode with highest probability]
+2. [Second most likely]
+3. [Third most likely]
 
-### Rollback Plan
-[How to undo this change if it goes wrong in production]
+#### Highest Impact Failures
+1. [Worst case scenario - even if unlikely]
+2. [Second worst]
+3. [Third worst]
 
-### Remaining Accepted Risks
-- [Failure #]: [why it's acceptable]
+### Assumptions at Risk
+| Assumption | Risk if Wrong |
+|------------|---------------|
+| ... | ... |
+
+### Required Mitigations (Do Before Launch)
+- [ ] [Mitigation 1]
+- [ ] [Mitigation 2]
+
+### Recommended Mitigations (Do If Time Allows)
+- [ ] [Mitigation 3]
+- [ ] [Mitigation 4]
+
+### Monitoring & Rollback
+- **How to detect failure**: [Metrics/alerts to watch]
+- **Rollback plan**: [How to undo if needed]
+
+### Verdict
+[ ] Safe to proceed
+[ ] Proceed with required mitigations
+[ ] Needs redesign - risks too high
 ```
 
-## Rules
+## Key Questions to Always Ask
 
-- Be pessimistic. The point is to find problems, not to reassure yourself.
-- Every failure mode should be specific, not vague. "Something could go wrong with the database" is not useful. "A partial write could leave an order in a state where it has line items but no total" is useful.
-- Blockers must be resolved before implementation proceeds. If a blocker can't be mitigated, reconsider the approach.
-- A rollback plan is not optional. Every production change needs one.
+1. **What's the blast radius?** If this fails, what else breaks?
+2. **Can we undo it?** Is there a rollback path?
+3. **How will we know it's broken?** Do we have monitoring?
+4. **What's the worst case?** Data loss? Security breach? Downtime?
+5. **What are we assuming about external systems?** APIs, databases, third parties?
+
+## Example
+
+**Plan**: Add auto-save that writes to Firebase every 5 seconds.
+
+**Pre-mortem reveals**:
+- **Assumption**: User always has network → WRONG, mobile users go offline
+- **Failure mode**: Rapid writes could hit Firebase rate limits
+- **Failure mode**: If save fails silently, user loses work
+- **Missing**: No conflict resolution if user opens two tabs
+
+**Mitigations**:
+- Add offline queue with retry
+- Debounce writes, batch changes
+- Show save status indicator
+- Add last-write-wins with timestamp
+
+## The Anti-Pattern This Prevents
+
+The Timer Feature Pattern from your lessons learned:
+- Jumped into coding
+- Discovered Firebase `update()` behavior mid-implementation
+- Spent hours debugging
+- Had to revert
+
+A pre-mortem would have asked: "What assumptions are we making about Firebase?" and caught this before any code was written.
+
+## Next Step
+
+Begin implementation. Reference the failure modes identified above during `/harden`.
+
+## When to Skip
+
+You can skip pre-mortem for:
+- Purely local changes with no external dependencies
+- Changes that are trivially reversible
+- Exploratory/prototype code that won't ship
+
+When in doubt, spend 5 minutes on a lightweight pre-mortem. It's the cheapest insurance you can buy.

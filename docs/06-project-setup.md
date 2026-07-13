@@ -62,15 +62,24 @@ An append-only log of corrections and discoveries specific to one project. When 
 
 ### Format
 
+Each entry is typed. The default type is a **correction**:
+
 ```markdown
 ## [YYYY-MM-DD] Short title
 
+**Type:** correction
 **Wrong assumption:** What you thought was true
 **Reality:** What's actually true
 **Impact:** How this changes future work
 ```
 
-One learning per block, 3-4 lines each, append only.
+Three more types cover the other things worth keeping: **pattern** (an approach that worked and should be reused: context, what works, when to reuse), **decision** (a design choice with non-obvious rationale: choice, why, alternatives rejected), and **domain** (a fact about the world rather than the tools: insight, source, where it applies). An entry with no `Type:` line is implicitly a correction, which keeps old logs compatible.
+
+One learning per block, 3-5 lines each, append only.
+
+### Scope: project vs. global
+
+Each learning is either **project** scope (stays in this repo's `learnings.md`) or **global** (also written as a topic file in your home project's memory, so other projects can find it). Learnings about tools and reusable techniques are usually global; learnings about this project's architecture stay local. The `/compound` skill handles the bookkeeping. See [Memory System](05-memory-system.md) for the promotion ladder.
 
 ## Templates
 
@@ -142,16 +151,23 @@ Example: a project-level UserPromptSubmit hook that reminds about planning when 
 }
 ```
 
-Keep hookify rule templates in `~/.claude/templates/hookify/` and copy them into new projects during scaffolding.
-
 ## Project Setup Checklist
 
-- [ ] `.claude/CLAUDE.md` with project context (start here -- highest impact)
-- [ ] `learnings.md` for correction tracking (can start empty)
-- [ ] Pre-commit hooks (Husky + linter/type checker at minimum)
-- [ ] `ROADMAP.md` or `FUTURE_FEATURES.md` for priorities
-- [ ] `CHANGELOG.md` for notable changes
-- [ ] GitHub Actions CI for tests, linting, and builds
-- [ ] Project-level hooks copied from `~/.claude/templates/hookify/` (if applicable)
+Run `/init` to handle the first batch automatically.
 
-Start with `CLAUDE.md` and `learnings.md`, then add the rest as the project matures.
+**At init:**
+
+- [ ] `.claude/CLAUDE.md` with project context, under 100 lines (start here -- highest impact)
+- [ ] `learnings.md` for correction tracking (can start empty)
+- [ ] `ROADMAP.md` with section headers for priorities
+- [ ] `CHANGELOG.md` (team/production projects only)
+- [ ] `.claude/settings.local.json` with stack-appropriate permissions
+- [ ] `.gitignore` updated (settings.local.json, work logs)
+
+**Add when ready, deliberately not at init:**
+
+- [ ] Pre-commit hooks (linter/type checker, then tests) -- once there are tests worth running
+- [ ] GitHub Actions CI -- once you are ready to deploy
+- [ ] Project-specific skills in `.claude/skills/` -- once workflows emerge
+
+The split matters: scaffolding CI and hooks before the project has anything to check just adds friction you learn to bypass.

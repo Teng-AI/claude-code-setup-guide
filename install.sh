@@ -28,13 +28,13 @@ PR_TEMPLATE_SRC="$SCRIPT_DIR/examples/PULL_REQUEST_TEMPLATE.md"
 
 STARTER_SKILLS=(
     "session-start"
+    "grill-me"
     "pre-implement"
-    "harden"
-    "tests"
-    "debug"
-    "git-workflow"
-    "docs"
+    "checkpoint"
     "wrap-up"
+    "compound"
+    "fool"
+    "humanizer"
 )
 
 FULL_INSTALL=false
@@ -114,9 +114,10 @@ check_prerequisites() {
 }
 
 # Install a single skill from a subdirectory containing SKILL.md.
-# Each skill lives at <src_dir>/<skill-name>/SKILL.md and gets installed
-# to ~/.claude/skills/<skill-name>/SKILL.md.
-# Arguments: $1 = skill subdirectory path (e.g. .../starter-pack/debug)
+# Each skill lives at <src_dir>/<skill-name>/ and gets installed to
+# ~/.claude/skills/<skill-name>/. The whole directory is copied, since
+# some skills ship support files (humanizer's voices/, tidy's scripts/).
+# Arguments: $1 = skill subdirectory path (e.g. .../starter-pack/fool)
 install_skill() {
     local skill_dir="$1"
     local skill_name
@@ -136,8 +137,8 @@ install_skill() {
     fi
 
     mkdir -p "$dest_dir"
-    cp "$src_file" "$dest_file"
-    log_ok "$skill_name/SKILL.md"
+    cp -R "$skill_dir/." "$dest_dir/"
+    log_ok "$skill_name/"
     return 0
 }
 

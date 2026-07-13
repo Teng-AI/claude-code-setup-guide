@@ -1,6 +1,7 @@
 ---
 name: pre-ship
 description: Production readiness checklist before deploying. Checks the gap between "it works" and "production-ready". REQUIRED before any deploy to production.
+disable-model-invocation: true
 ---
 
 # Pre-Ship Checklist
@@ -27,6 +28,7 @@ Before running this checklist, verify these were completed:
 | Skill | Required If... | Completed? |
 |-------|----------------|------------|
 | `/pre-implement` | Task was non-trivial | [ ] |
+| `/state-audit` | Feature has state | [ ] |
 | `/harden` | Feature has external deps | [ ] |
 | `/test-gaps` | Feature has logic | [ ] |
 | `/docs-sync` | Files were changed | [ ] |
@@ -120,6 +122,7 @@ For thorough security review, run `/security-check`.
 | Skill | Status |
 |-------|--------|
 | /pre-implement | ✅ Completed |
+| /state-audit | ✅ Completed |
 | /harden | ✅ Completed |
 | /test-gaps | ✅ Completed |
 | /docs-sync | ⚠️ Skipped (no doc changes needed) |
@@ -247,3 +250,7 @@ After deploying:
 4. Be ready to rollback if needed
 
 The deploy isn't done until you've verified it's working.
+
+## Next Step
+
+All clear? Deploy. Monitor error rates for 30 minutes after deploy.

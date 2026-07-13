@@ -12,7 +12,7 @@ cd claude-code-setup-guide
 ./install.sh
 ```
 
-This gives you the starter pack of essential skills covering the core development workflow. To install everything (all skills, hooks, memory system, templates):
+This gives you the starter pack of essential skills covering the core session workflow (kickoff, planning, checkpointing, wrap-up, and learnings capture). To install everything (all skills, hooks, memory system, templates):
 
 ```bash
 ./install.sh --full
@@ -37,8 +37,8 @@ Run `./install.sh --help` for all options.
 
 | Feature | Starter Pack | Full Setup |
 |---------|-------------|------------|
-| **Skills** | 8 core skills ([details](docs/03-skills.md)) | 8 core + all advanced skills ([details](docs/03-skills.md)) |
-| **Hooks** | -- | Pre-commit, post-tool, deploy gate, prompt-based workflow gates |
+| **Skills** | 8 core workflow skills ([details](docs/03-skills.md)) | 8 core + all advanced skills, including the code-project chain ([details](docs/03-skills.md)) |
+| **Hooks** | -- | Force-push guard, AI-writing check, pre-compaction save, planning nudges |
 | **Memory system** | -- | learnings.md tracking, session state persistence |
 | **Templates** | -- | PR templates, reference docs |
 | **Best for** | Getting started, trying out skills | Full workflow adoption across projects |

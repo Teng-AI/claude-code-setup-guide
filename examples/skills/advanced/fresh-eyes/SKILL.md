@@ -1,102 +1,125 @@
 ---
 name: fresh-eyes
-description: Reset perspective when stuck in debugging rabbit hole
+description: Reset when stuck in a rabbit hole. Summarizes what's been tried, identifies why it's failing, and proposes a completely different approach. Use when debugging for 30+ minutes or going in circles.
 ---
 
-# /fresh-eyes - Perspective Reset
+# Fresh Eyes Reset
 
-When invoked, stop the current debugging approach entirely and re-examine the problem from scratch. Use this when you've been going in circles: 3+ failed hypotheses, fixes that create new bugs, or a growing sense that you're looking in the wrong place.
+A structured way to break out of unproductive loops and approach a problem from scratch.
 
 ## When to Use
 
-- Three or more debug hypotheses have been tested and disproved.
-- A fix in one place keeps breaking something in another place.
-- You can't clearly explain what's going wrong.
-- You're making changes "to see what happens" instead of testing specific hypotheses.
-- The same error keeps reappearing after you think you've fixed it.
+Run `/fresh-eyes` when:
+- You've been debugging the same issue for 30+ minutes
+- The conversation has gotten long and tangled
+- You keep trying variations of the same failing approach
+- You feel frustrated or like you're going in circles
+- You've lost track of what's been tried
 
-## Steps
+## The Fresh Eyes Process
 
-### 1. Stop
+### Step 1: Summarize the Goal
 
-Put down the code. Do not make another change. Do not add another log statement. Stop.
+State in one sentence what we're trying to accomplish.
 
-### 2. Restate the Original Problem
+> "We're trying to [X] so that [Y]."
 
-Answer these two questions in plain language:
+### Step 2: List What's Been Tried
 
-- **What should happen?** (expected behavior)
-- **What actually happens?** (observed behavior)
+Create a table of attempts and outcomes:
 
-If you can't state these clearly, that itself might be the problem -- you may be debugging the wrong thing.
+| Attempt | Approach | Result | Why It Failed |
+|---------|----------|--------|---------------|
+| 1 | [Description] | [Outcome] | [Root cause] |
+| 2 | [Description] | [Outcome] | [Root cause] |
+| ... | ... | ... | ... |
 
-### 3. List All Current Assumptions
+### Step 3: Identify Patterns
 
-Write out every assumption you're making about:
+Look across all attempts and ask:
+- What assumptions are we making in ALL approaches?
+- Is there a common failure point?
+- Are we solving the right problem?
+- What have we NOT tried?
 
-- Where the bug is (which file, which function, which layer).
-- What's causing it (state, timing, data, logic).
-- What's working correctly (and therefore not worth investigating).
-- What the correct behavior should be.
+### Step 4: Challenge the Premise
 
-Be thorough. The bug is hiding behind one of these assumptions.
+Ask these questions:
+- **Is this actually necessary?** Could we achieve the goal differently?
+- **Are we fighting the framework?** Maybe the "right" way isn't what we're doing.
+- **What would a senior engineer do?** Step back and reconsider the architecture?
+- **What would we do if we had to start over?** (Sometimes you should.)
 
-### 4. Challenge Each Assumption
+### Step 5: Propose a Different Approach
 
-For each assumption, ask: "How do I know this is true? Have I verified it, or am I assuming it?"
+Suggest an approach that:
+- Doesn't share assumptions with previous attempts
+- Addresses the identified root cause pattern
+- Is simpler if possible
 
-Common false assumptions:
-- "This function is definitely returning the right value." (Did you log it?)
-- "The data coming in is correct." (Did you inspect it at the boundary?)
-- "This part works because it worked before." (Did something else change since then?)
-- "The error message is accurate." (Error messages lie. Often.)
-- "This code path is being executed." (Add a log at the top to confirm.)
+### Step 6: Decision Point
 
-### 5. Consider Different Angles
-
-Ask yourself:
-
-- **Wrong layer?** Could the bug be in the database, not the API? In the network, not the code? In the build, not the source?
-- **Wrong timing?** Is it a race condition, stale data, or caching issue?
-- **Wrong scope?** Are you looking at the right instance, the right environment, the right branch?
-- **Different cause, same symptom?** Could something entirely unrelated produce the same error?
-- **Is the test wrong?** Is the expected behavior actually correct?
-
-### 6. Form a New Approach
-
-Based on challenging your assumptions, identify:
-- Which assumption was most likely wrong.
-- What new hypothesis follows from correcting that assumption.
-- What's the simplest way to test this new hypothesis.
-
-Return to the `/debug` workflow with this new hypothesis.
+Present options to the user:
+1. **Try the new approach** in this conversation
+2. **Start a fresh session** with a clean summary
+3. **Take a break** and revisit later (sometimes the best option)
+4. **Ask for help** - pair with someone or post the question somewhere
 
 ## Output Format
 
-```
+```markdown
 ## Fresh Eyes Reset
 
-### Original Problem
-- Expected: [what should happen]
-- Actual: [what happens instead]
+### Goal
+[One sentence: what we're trying to do]
 
-### Assumptions Challenged
-- [Assumption 1]: [verified/unverified] - [how to verify if unverified]
-- [Assumption 2]: [verified/unverified] - [how to verify if unverified]
+### What's Been Tried
+| # | Approach | Result |
+|---|----------|--------|
+| 1 | ... | ... |
 
-### Previous Hypotheses (all disproved)
-1. [Hypothesis]: [what was learned]
-2. [Hypothesis]: [what was learned]
-3. [Hypothesis]: [what was learned]
+### Pattern Analysis
+- **Common assumption**: [What we keep assuming]
+- **Recurring failure point**: [Where things break]
+- **Unexplored direction**: [What we haven't tried]
 
-### New Direction
-- Most likely false assumption: [which one]
-- New hypothesis: [statement]
-- Test plan: [how to verify with one change]
+### Root Cause Hypothesis
+[What I think is actually going wrong]
+
+### Proposed New Approach
+[Completely different strategy that addresses the root cause]
+
+### Recommendation
+[ ] Try new approach here
+[ ] Start fresh session with this context
+[ ] Step away and revisit
 ```
 
-## Rules
+## Key Principles
 
-- Do not skip any step. The value is in the process, not the speed.
-- Be honest about what you've actually verified vs. what you've assumed.
-- If after fresh-eyes you still can't form a good hypothesis, consider: is the problem well-defined? Can it be reproduced reliably? If not, focus on reproduction first.
+### Sunk Cost is Real
+You've invested time in the current approach. That's irrelevant. The question is: what's the best path forward FROM HERE?
+
+### Frustration is a Signal
+When you feel stuck, that's valuable information. It usually means:
+- The problem is harder than expected
+- You're missing context or information
+- The approach fundamentally doesn't work
+
+### Starting Over Can Be Faster
+A 30-minute conversation that's stuck will often take another 30 minutes to unstick. A fresh 15-minute conversation with the lessons learned is often faster.
+
+## Example
+
+**Stuck situation**: "We've tried 4 ways to sync the timer state with Firebase and none work correctly."
+
+**Fresh eyes reveals**: All 4 approaches assumed Firebase `update()` does deep merges. It doesn't. The fix isn't a better sync strategy—it's restructuring the data model.
+
+**New approach**: Flatten the state structure so `update()` works as expected.
+
+## When Fresh Eyes Isn't Enough
+
+If fresh eyes still doesn't help:
+- The problem might require knowledge you don't have (time to research or ask)
+- The problem might be a bug in a dependency (time to check issues/forums)
+- The problem might need a completely different technology choice

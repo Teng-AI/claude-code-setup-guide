@@ -1,6 +1,6 @@
 # Skills
 
-> **Revision note (July 2026).** A transcript audit of the live config found the code-project chain skills below (/learn, /state-audit, /harden, /test-gaps, /docs-sync, /pre-ship, /debug, /fresh-eyes, /refactor, /pre-mortem) had zero to two uses in 90 days once the work shifted from code to knowledge/ops. They were archived with re-add triggers, and /pre-mortem was folded into /pre-implement as a required step. They remain documented here: the skills are sound for code-heavy work, and the meta-lesson is the point. Prune skills against measured usage, and archive rather than delete so a trigger can bring them back.
+> **Revision note (July 2026).** A transcript audit of the live config found the code-project chain skills (/learn, /harden, /test-gaps, /docs-sync, /pre-ship, /debug, /fresh-eyes, /refactor, /pre-mortem) had zero to two uses in 90 days once the work shifted from code to knowledge/ops. They were archived with re-add triggers, and /pre-mortem was folded into /pre-implement as a required step. The catalog below now leads with the knowledge/ops workflow the live config actually runs; the code chain remains shipped and documented under "Code-Project Chain" because the skills are sound for code-heavy work. The meta-lesson travels with them: prune skills against measured usage, and archive rather than delete so a trigger can bring them back.
 
 ## What Are Skills?
 
@@ -100,89 +100,98 @@ You can write a `SKILL.md` from scratch, or use the `/create-skill` skill to gen
 
 ## Skills Catalog
 
-All skills organized by workflow phase.
+All skills organized by workflow phase. The starter pack is the core loop the live config runs daily; the advanced sets extend it.
 
 ---
 
-### Session Management
+### Core Workflow (Starter Pack)
+
+The daily loop: `/grill-me` (if the idea is fuzzy) -> do the work -> `/checkpoint` as you go -> `/wrap-up`. Run `/pre-implement` before anything non-trivial gets built.
 
 | Skill | Description | When to Use | Level |
 |-------|-------------|-------------|-------|
 | `/session-start` | Standardized session kickoff with health checks and context loading. | At the start of every session. | Beginner |
-| `/wrap-up` | End-of-session documentation and handoff routine. | At the end of every session. | Beginner |
-| `/onboard` | Get up to speed on an unfamiliar codebase quickly. | When joining a new project. | Intermediate |
+| `/grill-me` | Relentless one-question-at-a-time interview that extracts decisions from your head, checkpointing every answer to a `brainstorms/` file. | When bringing a fuzzy idea or process that needs decisions extracted before planning. | Beginner |
+| `/pre-implement` | Pre-implementation planning with research, design trade-offs, and a required pre-mortem step. | Before any non-trivial feature or change. | Beginner |
+| `/checkpoint` | High-fidelity session save: writes a HANDOVER.md breadcrumb (state, next step, open decisions) and commits. | Before compacting, stepping away, or nearing the context limit mid-task. | Beginner |
+| `/wrap-up` | End-of-session routine: session log, roadmap update, git check, learnings capture, handoff. | At the end of every session. | Beginner |
+| `/compound` | Extract learnings from the session (corrections, patterns, decisions, domain insights) into `learnings.md` and memory. | After meaningful work, or anytime something is worth remembering. | Beginner |
+| `/fool` | Structured devil's advocate for stress-testing decisions, strategies, and beliefs. | Before any high-stakes decision, or when you want holes poked in a plan. | Intermediate |
+| `/humanizer` | Remove signs of AI-generated writing, calibrated against a measured voice profile. | When polishing content for sending or publication. Pairs with a PostToolUse hook that flags AI tells automatically. | Intermediate |
 
 ---
 
-### Planning
+### Thinking and Communication
 
 | Skill | Description | When to Use | Level |
 |-------|-------------|-------------|-------|
-| `/pre-implement` | Pre-implementation planning with the 7 questions, state management analysis, and trade-offs. | Before any non-trivial feature. | Beginner |
-| `/pre-mortem` | Imagine the solution already failed and surface risks before they happen. | For high-stakes features (payments, auth, production data). | Intermediate |
+| `/plain` | Re-explain the current technical topic in plain English, anchored in the live example in the conversation. | When jargon piles up or layered concepts blur together. | Beginner |
+| `/show-me` | Build a visual (diagram, table, timeline, widget) to explain the current topic. Sibling of `/plain`: that one fixes the words, this one fixes the shape. | When an explanation involves 3+ interacting parts or a multi-step flow. | Beginner |
+| `/deck-review` | Review an investor pitch deck across positioning, narrative flow, consistency, and fundability. | Before sending a deck, or when giving deck feedback. | Advanced |
+| `/open` | Find and open a file by fuzzy name match. | When you know roughly what a file is called but not where it lives. | Beginner |
+
+---
+
+### Setup Maintenance
+
+| Skill | Description | When to Use | Level |
+|-------|-------------|-------------|-------|
+| `/setup-audit` | Periodic audit of the whole Claude Code setup: CLAUDE.md bloat, settings security, permission accumulation, hook safety, memory hygiene, version drift. | Monthly, after version bumps, or before sharing a machine or config. | Advanced |
+| `/tidy` | Refactor a folder of docs or notes: audit for drift, then consolidate and reorganize, preserving content and git history. | When a knowledge folder has accumulated duplication and rot. | Intermediate |
+| `/create-skill` | Create new Claude Code skills interactively. | When building a custom skill. | Advanced |
+
+---
+
+### Code-Project Chain
+
+Archived in the live config after a usage audit (see the revision note above), but shipped and maintained here because the chain is sound for code-heavy work.
+
+| Skill | Description | When to Use | Level |
+|-------|-------------|-------------|-------|
 | `/learn` | Research an unfamiliar domain or library before building with it. | Before using a new API or framework. | Intermediate |
-
----
-
-### Implementation
-
-| Skill | Description | When to Use | Level |
-|-------|-------------|-------------|-------|
 | `/harden` | Add error handling, validation, and logging after the happy path works. | After "it works" and before writing tests. | Beginner |
-| `/comprehend` | Walk through code line-by-line before using or modifying it. | Before modifying unfamiliar code. | Intermediate |
-| `/refactor` | Systematic refactoring with safety checks. | When cleaning up code. | Intermediate |
-
----
-
-### Quality
-
-| Skill | Description | When to Use | Level |
-|-------|-------------|-------------|-------|
 | `/test-gaps` | Analyze test coverage gaps and write missing tests. | After implementation. | Beginner |
-| `/code-reviewer` | Review code for correctness, security, and performance. | Before committing. | Intermediate |
 | `/debug` | Structured, hypothesis-driven debugging workflow. | When something breaks. | Beginner |
 | `/fresh-eyes` | Reset perspective when stuck in a debugging rabbit hole. | After 3 or more failed debug attempts. | Intermediate |
-
----
-
-### Deployment
-
-| Skill | Description | When to Use | Level |
-|-------|-------------|-------------|-------|
-| `/pre-ship` | Production readiness checklist. | Before deploying. | Intermediate |
+| `/refactor` | Systematic refactoring with safety checks. | When cleaning up code. | Intermediate |
 | `/docs-sync` | Sync documentation with code changes. | Before committing. | Beginner |
+| `/pre-ship` | Production readiness checklist. | Before deploying. | Intermediate |
+| `/pre-mortem` | Imagine the solution already failed and surface risks before they happen. (Folded into `/pre-implement` in the live config; kept standalone here.) | For high-stakes features (payments, auth, production data). | Intermediate |
 | `/git-workflow` | Standard git operations with conventional commits. | For all git work. | Beginner |
-| `/nextjs-deploy` | Next.js preview and deploy workflow. | When deploying Next.js apps. | Advanced |
 
 ---
 
-### Specialized
+### Specialized (Legacy)
+
+Older skills kept as construction references. Useful patterns, but not part of the maintained workflow.
 
 | Skill | Description | When to Use | Level |
 |-------|-------------|-------------|-------|
+| `/onboard` | Get up to speed on an unfamiliar codebase quickly. | When joining a new project. | Intermediate |
+| `/comprehend` | Walk through code line-by-line before using or modifying it. | Before modifying unfamiliar code. | Intermediate |
+| `/code-reviewer` | Review code for correctness, security, and performance. | Before committing. | Intermediate |
+| `/nextjs-deploy` | Next.js preview and deploy workflow. | When deploying Next.js apps. | Advanced |
 | `/debug-firebase` | Firebase-specific debugging patterns. | When debugging Firebase issues. | Advanced |
 | `/security-check` | Security vulnerability scanner. | Before shipping features that handle user data. | Advanced |
 | `/performance-audit` | Performance analysis for web apps. | When investigating slow pages or interactions. | Advanced |
 | `/architecture-review` | Codebase health check and infrastructure maturity assessment. | During project planning or quarterly reviews. | Advanced |
 | `/design-review` | Visual design review covering hierarchy, typography, color, and layout. | When reviewing UI changes. | Advanced |
-| `/qa` | QA test a web application — find bugs and fix them (diff-aware, full, or quick mode). | Before launching or after major UI changes. | Advanced |
+| `/qa` | QA test a web application: find bugs and fix them (diff-aware, full, or quick mode). | Before launching or after major UI changes. | Advanced |
 | `/doc-write` | Write new documentation from scratch. | When creating docs for a new feature or project. | Intermediate |
 | `/project-scaffolding` | Set up new projects with sensible defaults. | When starting a new project. | Intermediate |
-| `/create-skill` | Create new Claude Code skills interactively. | When building a custom skill. | Advanced |
 | `/prompt-refiner` | Improve and optimize prompts. | When a prompt is not producing good results. | Advanced |
-| `/humanizer` | Remove signs of AI-generated writing. | When polishing content for publication. | Advanced |
 | `/ralph-prep` | Optimize prompts for Ralph Loop autonomous iteration. | When setting up autonomous workflows. | Advanced |
 | `/project-roadmap` | Quick view of active priorities across projects. | When planning what to work on next. | Intermediate |
-| `/business-thought-partner` | Strategic business advisor for product and business decisions. | When making business strategy decisions. | Advanced |
+| `/business-thought-partner` | Strategic business advisor template (fill in your own business context). | When making business strategy decisions. | Advanced |
 
 ---
 
 ## Recommended Learning Path
 
-**Stage 1: Starter Pack** -- session-start, pre-implement, harden, test-gaps, debug, docs-sync, git-workflow, wrap-up
+**Stage 1: Core loop** -- session-start, pre-implement, wrap-up. Get the open-work-close rhythm habitual first.
 
-**Stage 2: Add Planning** -- pre-mortem, learn
+**Stage 2: Capture and continuity** -- compound, checkpoint. This is where the setup starts paying rent: learnings persist and sessions hand off cleanly.
 
-**Stage 3: Add Quality** -- code-reviewer, fresh-eyes, comprehend, refactor
+**Stage 3: Better inputs** -- grill-me before building, fool before deciding, humanizer before sending.
 
-**Stage 4: Specialized** -- pre-ship, security-check, performance-audit, plus others as needed
+**Stage 4: Extend by domain** -- plain, show-me, deck-review, and the maintenance skills (setup-audit, tidy) as your setup grows. Add the code-project chain if your work is code-heavy.

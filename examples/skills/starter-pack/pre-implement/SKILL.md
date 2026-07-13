@@ -1,6 +1,6 @@
 ---
 name: pre-implement
-description: Planning workflow before implementing any non-trivial feature. Use when starting work on a new feature, bug fix, or significant code change. Forces research and design before coding.
+description: Planning workflow before implementing any non-trivial feature. Use when starting work on a new feature, bug fix, or significant code change. Forces research and design before coding, and includes a required pre-mortem step (imagine the shipped solution failed; surface risks, wrong assumptions, and failure modes while course corrections are still cheap).
 ---
 
 # Pre-Implementation Planning
@@ -18,17 +18,14 @@ Run `/pre-implement` before starting ANY task that:
 
 ## Prerequisites Check
 
-Before running this skill, verify:
+Before running this skill:
 
-| If task involves... | Run first |
-|---------------------|-----------|
-| Unfamiliar library/API | `/learn` |
-
-If these weren't run, stop and run them now.
+- **State/sync/real-time/Firebase involved?** Map the state up front: where each piece lives, what writes it, how other components learn it changed, and what happens when copies disagree. Do this before designing, not during implementation.
+- **Unfamiliar library/API?** Read the official docs first. Note update/merge semantics, rate limits, auth quirks, and documented gotchas before committing to an approach.
 
 ## The Pre-Implementation Checklist
 
-### Phase 1: Understand the Problem
+### Phase 1: Understand the Problem (The 7 Questions)
 
 Before writing any code, answer these questions:
 
@@ -61,6 +58,8 @@ Before writing any code, answer these questions:
    - [ ] How do other components know when it changes?
    - [ ] What happens if state gets out of sync?
 
+   **If state is complex, stop and diagram it now** (every location, writer, and listener) before continuing.
+
 6. **What's the approach?**
    - [ ] Draw a state diagram if state management is involved
    - [ ] List the files that need to change
@@ -91,16 +90,26 @@ Before writing any code, answer these questions:
     - [ ] Include happy path and error cases
     - [ ] Include edge cases identified in step 1
 
-### Phase 3: Validate the Plan
+### Phase 3: Pre-Mortem and Validation
 
-11. **Review the plan**
+11. **Pre-mortem (required)**
+
+    Imagine it's 3 months from now and this feature failed badly in production. Work backwards from that incident:
+    - [ ] List the top 3-5 failure modes. Sweep the categories: data integrity (runs twice, partial completion, races), external dependencies (slow, down, unexpected responses, expired credentials), scale, edge cases, security, operations (how would we even know it broke?)
+    - [ ] List every assumption the plan makes and what happens if each is wrong. Verify the risky ones empirically before coding (a 5-minute test against real data beats ship-and-watch)
+    - [ ] For each high-impact risk, name a cheap course correction now: a mitigation, a monitoring signal, or a rollback path
+    - [ ] Verdict: safe to proceed / proceed with required mitigations / redesign, risks too high
+
+    This is required, not optional. A solution that "feels too easy" is the strongest signal to slow down here.
+
+12. **Review the plan**
     - [ ] Does this align with existing patterns in the codebase?
     - [ ] Is this the simplest solution that works?
     - [ ] Are there any obvious issues?
-    - [ ] Did we answer all the self-check questions?
+    - [ ] Did we answer all 7 self-check questions?
 
-12. **Get confirmation**
-    - [ ] Present the plan to the user
+13. **Get confirmation**
+    - [ ] Present the plan (including the pre-mortem verdict) to the user
     - [ ] Confirm approach before coding
 
 ## Output Format
@@ -188,19 +197,19 @@ When the task is complete, move the directory from `plans/active/` to `plans/com
 
 ## Example Usage
 
-**User**: "Add a webhook handler that retries failed deliveries"
+**User**: "Add a calling phase timer that auto-passes after 30 seconds"
 
 **Before `/pre-implement`** (what NOT to do):
-- Jump in and start coding the retry logic
-- Discover race conditions with concurrent deliveries mid-implementation
+- Jump in and start coding the timer
+- Discover Firebase sync issues mid-implementation
 - Spend hours debugging
 - Revert everything
 
 **After `/pre-implement`** (correct approach):
-1. Research the webhook provider's retry semantics and idempotency guarantees
-2. Discover that duplicate deliveries are possible during retries
-3. Design state management with idempotency keys to handle this
-4. Write test for "when delivery fails, retry queue should process in order"
+1. Research Firebase Realtime Database update semantics
+2. Discover that `update()` merges nested objects
+3. Design state management to handle this
+4. Write test for "when timer expires, pendingCalls should clear"
 5. THEN implement
 
 ## Key Principle
@@ -208,6 +217,10 @@ When the task is complete, move the directory from `plans/active/` to `plans/com
 > "Weeks of coding can save you hours of planning."
 
 The time spent planning is always less than the time spent debugging a bad implementation.
+
+## Next Step
+
+Begin implementing. The pre-mortem is built into Phase 3 above, so no separate risk pass is needed. Keep the identified failure modes in view while coding and reference them when adding error handling.
 
 ## When to Skip
 

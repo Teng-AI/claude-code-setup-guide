@@ -15,11 +15,14 @@ The split exists so you can share your general configuration while keeping permi
 
 | Setting | Type | What it does | Starter? |
 |---------|------|-------------|----------|
-| `model` | string | Which Claude model to use. `claude-opus-4-6` for complex reasoning; `claude-sonnet-4-20250514` for speed. | Yes |
+| `model` | string | Which Claude model to use. Aliases like `"opus"` (deepest reasoning) or `"sonnet"` (faster) track the latest version so you are not pinning a dated model ID. | Yes |
 | `alwaysThinkingEnabled` | boolean | Forces extended thinking on every response. Reduces errors on complex tasks at the cost of longer responses. | Yes |
+| `effortLevel` | string | How much reasoning effort to spend per response (e.g. `"high"`, `"xhigh"`). Pairs with `alwaysThinkingEnabled`. | No |
 | `hooks` | object | Run shell commands before/after Claude uses a tool. See [Hooks](04-hooks.md). | No |
+| `statusLine` | object | A shell command whose output renders as the terminal status line (current dir, branch, model). | No |
 | `autoUpdatesChannel` | string | Release channel: `"latest"` (stable), `"beta"` (pre-release), `"disabled"` (manual). | No |
-| `skipDangerousModePermissionPrompt` | boolean | Skip confirmation before potentially destructive commands. **This is the single biggest quality-of-life setting** -- once you trust your allow/deny lists, flipping this to `true` eliminates most approval prompts and lets you work uninterrupted. Start with `false`, switch to `true` after a few sessions. | No |
+| `skipDangerousModePermissionPrompt` | boolean | Skip confirmation before potentially destructive commands. **This is the single biggest quality-of-life setting** -- once you trust your allow/deny lists, flipping this to `true` eliminates most approval prompts and lets you work uninterrupted. Start with `false`, switch to `true` after a few sessions, and re-check the decision whenever the machine or the stakes change (a `/setup-audit` run will ask). | No |
+| `inputNeededNotifEnabled` / `agentPushNotifEnabled` | boolean | System notifications when Claude needs input or a background agent finishes. Useful once you run longer autonomous tasks. | No |
 | `voiceEnabled` | boolean | Enables voice input for speaking to Claude instead of typing. | No |
 
 Settings marked "Starter? Yes" are the only two you need when first setting up. Add others as you discover what you need.
@@ -28,10 +31,12 @@ Example minimal `settings.json`:
 
 ```json
 {
-  "model": "claude-opus-4-6",
+  "model": "opus",
   "alwaysThinkingEnabled": true
 }
 ```
+
+See [`../examples/settings.json`](../examples/settings.json) for the full live example, including the hook wiring.
 
 ---
 

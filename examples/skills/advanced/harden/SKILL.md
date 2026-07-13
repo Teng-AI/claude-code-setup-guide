@@ -244,6 +244,10 @@ Implement feature (happy path)
 /test-gaps → Tests both happy path AND failure cases
 ```
 
+## Next Step
+
+Run `/test-gaps` to cover the error handling and edge cases added above.
+
 ## When to Skip
 
 You can skip `/harden` for:

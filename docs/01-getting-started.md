@@ -25,16 +25,17 @@ Install Claude Code following the [official documentation](https://docs.anthropi
   skills/                    # Slash command definitions
     session-start/
       SKILL.md
+    grill-me/
+      SKILL.md
     pre-implement/
       SKILL.md
-    harden/
-      SKILL.md
     ...
+    _archive/                # Retired skills, kept with re-add triggers
+  hooks/                     # Shell scripts referenced by hooks in settings.json
   references/                # Reference docs Claude can access on demand
   templates/                 # Reusable templates (PR templates, issue templates, etc.)
   agents/                    # Custom agent definitions
-  projects/                  # Per-project memory and tasks (auto-managed by Claude)
-  memory/                    # Persistent memory files
+  projects/                  # Per-project memory and state (auto-managed by Claude)
 ```
 
 ---
