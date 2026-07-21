@@ -4,7 +4,7 @@
 
 **Who:** [YOUR ROLE]. Growth areas: [YOUR GROWTH AREAS].
 
-**Workflow:** `/grill-me` (if fuzzy) → do the work → `/checkpoint` as you go → `/wrap-up`. For anything non-trivial to build, run `/pre-implement` (includes the pre-mortem step) before building. The dormant code-project chain lives in `skills/_archive/` with re-add triggers; restore it when a real code project starts.
+**Workflow:** `/grill-me` (if fuzzy) → do the work → `/checkpoint` as you go → `/wrap-up`. For anything non-trivial to build, run `/pre-implement` (includes the pre-mortem step) before building. The code-project chain (debug, harden, test-gaps, state-audit, docs-sync, learn, refactor, fresh-eyes) is active in `skills/` (restored 2026-07-13; only pre-mortem stays archived, folded into /pre-implement).
 
 **Dates:** Always check today's date from the system environment before writing dates. Don't assume the year.
 
@@ -28,10 +28,10 @@
 - Revert failed attempts before trying next
 - After 3 failures: stop, summarize what was tried, and propose a fundamentally different approach
 
-### When Reviewing Code
+### When Reviewing (decks, proposals, structures, code)
 - Skeptical mode, not encouraging
-- What would break in production?
-- Check separation of concerns and state management
+- Most reviews here are decks, proposals, and Drive/Notion structures: check consistency, positioning, and what a skeptical outside reader would poke at
+- For code: what would break in production? Check separation of concerns and state management
 
 ### Context-Specific
 - Bug report / failing test → Investigate autonomously (read logs, trace code, form hypothesis). Fix directly if < 5 lines and localized. For anything larger, present hypothesis + proposed fix before changing code.
@@ -52,7 +52,7 @@ Applies to ALL output: chat responses, documents, emails, commit messages, code 
 
 ## Automation
 
-Hooks in `settings.json` guard (force-push block, humanizer check) and suggest (high-stakes planning nudge); skills chain via the "Next Step" at the bottom of each skill output. Hooks suggest, they don't enforce. When a hook fires, weigh its guidance against the actual context.
+Hooks in `settings.json`: the force-push block and humanizer check enforce (they hard-block the action); the high-stakes planning nudge only suggests. Skills chain via the "Next Step" at the bottom of each skill output. When a suggestion hook fires, weigh its guidance against the actual context.
 
 ---
 
