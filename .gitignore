@@ -12,3 +12,8 @@ node_modules/
 # Claude Code internal state (may contain personal context)
 .claude/work-logs/
 .claude/projects/
+
+# Session meta files — local continuity only, never published
+HANDOVER.md
+learnings.md
+brainstorms/
