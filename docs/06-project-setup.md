@@ -142,7 +142,7 @@ Example: a project-level UserPromptSubmit hook that reminds about planning when 
         "hooks": [
           {
             "type": "command",
-            "command": "prompt=$(echo \"$USER_PROMPT\" | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'firebase|firestore|realtime|sync|real-time|websocket|state.?manag'; then echo 'State/sync work detected. Consider running /pre-implement before coding.'; fi; exit 0"
+            "command": "prompt=$(jq -r '.prompt // \"\"' | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'firebase|firestore|realtime|sync|real-time|websocket|state.?manag'; then echo 'State/sync work detected. Consider running /pre-implement before coding.'; fi; exit 0"
           }
         ]
       }

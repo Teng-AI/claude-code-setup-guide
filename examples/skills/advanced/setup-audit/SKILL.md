@@ -297,7 +297,7 @@ done
 **Red flags in hook command strings:**
 - `curl ... | bash` or `wget ... | sh` (remote code execution)
 - `eval` with any unvalidated variable
-- `$TOOL_INPUT` or `$TOOL_RESULT` piped without escaping
+- stdin JSON fields (`.tool_input.command`, `.prompt`, `.tool_response`) piped into a shell without quoting
 - Writes to `~/.ssh`, `~/.gnupg`, `~/.aws`, or any credential path
 - Any command line containing `API_KEY`, `TOKEN`, `PASSWORD`, `SECRET` (leaks via process list)
 
