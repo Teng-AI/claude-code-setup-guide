@@ -13,10 +13,7 @@
 ## Profile
 
 - **Name:** [YOUR NAME]
-- **Background:** [YOUR BACKGROUND], [YOUR EXPERIENCE]
 - **Location:** [YOUR LOCATION]
-- **Strengths:** [YOUR STRENGTHS]
-- **Growth Areas:** [YOUR GROWTH AREAS]
 
 ---
 
@@ -32,6 +29,9 @@
 - Skeptical mode, not encouraging
 - Most reviews here are decks, proposals, and Drive/Notion structures: check consistency, positioning, and what a skeptical outside reader would poke at
 - For code: what would break in production? Check separation of concerns and state management
+
+### When Operating on Someone Else's System
+Drive, Notion, Sheets, a client's repo: produce a move-map and a revert path before executing, then verify by querying back what you changed. Never a blind batch write. This is the house style for bulk operations and it is what makes them safe to run at all.
 
 ### Context-Specific
 - Bug report / failing test → Investigate autonomously (read logs, trace code, form hypothesis). Fix directly if < 5 lines and localized. For anything larger, present hypothesis + proposed fix before changing code.
@@ -72,10 +72,12 @@ When compacting, preserve: exact file paths, open decisions, the current task's 
 
 ## References (loaded on demand)
 
-See @references/learnings-format.md for learnings.md format and rules
-See @references/project-setup-checklist.md for new project setup
 See @references/git-workflow.md for branch strategy and commit conventions
-See @references/tools.md for installed CLI tools (gws, gh, firebase, vercel, gcloud)
+See @references/tools.md for account map and installed CLI tools (gws, gh, firebase, vercel, gcloud)
+Tool command shapes, gws auth internals, document-parser choice: `~/.claude/references/tools-detail.md` (lazy-loaded)
+CLAUDE.md shape for a new or retrofitted repo: `~/.claude/references/claude-md-templates.md` (lazy-loaded; `/init` reads it)
+`learnings.md` format: `~/.claude/references/learnings-format.md` (lazy-loaded; `/compound` and `/wrap-up` read it)
+New project setup: `~/.claude/references/project-setup-checklist.md` (lazy-loaded; `/init` reads it)
 Notion work: read `~/.claude/references/notion-api.md` first — direct API calls for block types, file uploads, views (lazy-loaded, not @-imported)
 Co-Work skill building: read `~/.claude/references/cowork-skill-design.md` first — token budgets, context management, skill sizing (lazy-loaded, not @-imported)
 Memory system questions (what goes in which layer, consolidation): read `~/.claude/references/memory-system.md` (lazy-loaded, not @-imported)
