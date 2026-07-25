@@ -52,7 +52,7 @@ Applies to ALL output: chat responses, documents, emails, commit messages, code 
 
 ## Automation
 
-Hooks in `settings.json`: the force-push block and humanizer check enforce (they hard-block the action); the high-stakes planning nudge only suggests. Skills chain via the "Next Step" at the bottom of each skill output. When a suggestion hook fires, weigh its guidance against the actual context.
+Hooks in `settings.json` all enforce: the force-push block and the humanizer check hard-block the action rather than advising. Skills chain via the "Next Step" at the bottom of each skill output. The high-stakes planning nudge was removed 2026-07-25 (fired in 71 sessions, converted in 5); if a suggestion-only hook is ever added back, weigh its guidance against the actual context.
 
 ---
 

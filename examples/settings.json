@@ -52,12 +52,14 @@
         ]
       }
     ],
-    "UserPromptSubmit": [
+    "DirectoryAdded": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "prompt=$(jq -r '.prompt // \"\"' | tr '[:upper:]' '[:lower:]'); if echo \"$prompt\" | grep -qE 'payment|billing|stripe|auth(entication)?|login|signup|password|prod(uction)?.?data|migration'; then echo 'High-stakes task detected. Consider running /pre-implement (includes the pre-mortem step) before coding.'; fi; exit 0"
+            "command": "~/.claude/hooks/directory-added-context.sh",
+            "timeout": 10,
+            "statusMessage": "Reading the attached repo context"
           }
         ]
       }
