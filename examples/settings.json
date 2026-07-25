@@ -51,18 +51,6 @@
           }
         ]
       }
-    ],
-    "DirectoryAdded": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/directory-added-context.sh",
-            "timeout": 10,
-            "statusMessage": "Reading the attached repo context"
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
