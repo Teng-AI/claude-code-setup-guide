@@ -4,7 +4,7 @@
 
 **Who:** [YOUR ROLE]. Growth areas: [YOUR GROWTH AREAS].
 
-**Workflow:** `/grill-me` (if fuzzy) → do the work → `/checkpoint` as you go → `/wrap-up`. For anything non-trivial to build, run `/pre-implement` (includes the pre-mortem step) before building. Keep a code-project skill chain (debug, harden, test-gaps, docs-sync, ...) in `skills/`; archive skills you stop using, with re-add triggers.
+**Workflow:** `/grill-me` (if fuzzy) → do the work → `/checkpoint` as you go → `/wrap-up`. For anything non-trivial to build, run `/pre-implement` before building; it carries the pre-mortem and the state-mapping and read-the-docs prerequisites, so those have no separate skill. The code-project chain is archived, with per-skill re-add triggers in `~/.claude/skills/_archive/README.md`.
 
 **Dates:** Always check today's date from the system environment before writing dates. Don't assume the year.
 
@@ -56,6 +56,29 @@ Hooks in `settings.json` all enforce: the force-push block and the humanizer che
 
 ---
 
+## Where things go
+
+Route by **purpose**, not by who wrote it. **Tiebreaker: would the answer be the same for someone who is not me?** Yes means world knowledge, so the vault. No, it is about how a tool behaves in my setup, so memory. ([A DOMAIN FACT] is the same for anyone working in that domain, so vault. A flag specific to your own CLI setup is about your tooling, so memory.)
+
+- Changes Claude's behavior (tool gotchas, preferences, process) → auto-memory. Nothing else goes there.
+- World knowledge I would read myself → `brain/topics/`, which is edited forever. Dated snapshots → `brain/research/`, which is write-once. Putting a living topic in `research/` makes it immutable by accident.
+- Meetings, people, raw records → the brain raw layer, via `/process-ai-meetings`.
+- Cross-project decisions → `brain/decisions.md`. Code-level decisions → that repo's `learnings.md`.
+- Global-scope lessons → the `learnings.md` entry AND the memory file AND the MEMORY.md index line, all three (`/compound` enforces this).
+- Tasks, ideas, triage → Notion. Volatile status → nowhere durable; link the live source.
+- Brainstorms follow the work: repo work → that repo's `brainstorms/`, personal or strategic → `brain/brainstorms/`, harness audits → `home/audits/`.
+
+**Across layers, use plain backticked paths, never `[[wikilinks]]`.** A wikilink resolves inside one memory directory or inside the vault. Across that boundary it promises a graph that does not exist, and it silently resolves to nothing.
+
+**Demotion is event-driven, never time or usage based.** Promotion has a ladder; removal needs one too, or everything ratchets upward until the index hits its cap.
+- **Superseded on write:** a fact that contradicts an existing one replaces it rather than sitting beside it.
+- **Project dies** (moves to `_archive/`): its memory collapses to a pointer stub.
+- Do not prune by age or by "unused". The rarely-retrieved entries here are the highest-value ones, and a decay policy deletes exactly those.
+
+Detail and the full lifecycle: `~/.claude/references/memory-system.md`.
+
+---
+
 ## Context Discipline
 
 - **Offload heavy reads.** Token-heavy work (many images, large files, multi-source research) → delegate to subagents; keep only their conclusions in the main thread. Don't pull 20+ images or whole large files into the main window.
@@ -81,3 +104,5 @@ New project setup: `~/.claude/references/project-setup-checklist.md` (lazy-loade
 Notion work: read `~/.claude/references/notion-api.md` first — direct API calls for block types, file uploads, views (lazy-loaded, not @-imported)
 Co-Work skill building: read `~/.claude/references/cowork-skill-design.md` first — token budgets, context management, skill sizing (lazy-loaded, not @-imported)
 Memory system questions (what goes in which layer, consolidation): read `~/.claude/references/memory-system.md` (lazy-loaded, not @-imported)
+A check came back empty, or you are building a probe/linter/audit step: read `~/.claude/references/control-testing.md` first — nine cases where an unvalidated negative read as proof (lazy-loaded, not @-imported)
+Driving a browser: read `~/.claude/references/browser-control.md` **before picking a surface** — the Chrome extension only bridges from Google Chrome and needs the extension and the site session in the same browser profile, so it often cannot connect; Playwright is the default for logins/uploads/multi-step flows (lazy-loaded, not @-imported)

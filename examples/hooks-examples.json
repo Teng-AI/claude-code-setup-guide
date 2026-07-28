@@ -7,6 +7,12 @@
           {
             "type": "command",
             "command": "cmd=$(jq -r '.tool_input.command // \"\"'); if echo \"$cmd\" | grep -qE 'git push.*( -f($| )| --force)'; then echo 'Blocked: force-push from the agent is not allowed. Do it yourself if you really mean it.'; exit 2; fi; if echo \"$cmd\" | grep -qE 'git push.*( |:)(main|master)($| )'; then authors=$(git log --format='%ae' 2>/dev/null | sort -u | wc -l | tr -d ' '); if [ \"${authors:-0}\" -gt 1 ]; then echo 'Blocked: this repo has multiple contributors - do not push directly to main/master. Use a feature branch + PR.'; exit 2; fi; fi; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/repo-visibility-guard.py",
+            "timeout": 20,
+            "statusMessage": "Checking repo visibility change"
           }
         ]
       }
@@ -20,6 +26,12 @@
             "command": "~/.claude/hooks/humanizer-check.sh",
             "timeout": 10,
             "statusMessage": "Checking for AI-writing tells"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/harness-lint-check.sh",
+            "timeout": 20,
+            "statusMessage": "Checking harness references"
           }
         ]
       }
