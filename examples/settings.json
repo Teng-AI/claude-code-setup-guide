@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cmd=$(jq -r '.tool_input.command // \"\"'); if echo \"$cmd\" | grep -qE 'git push.*( -f($| )| --force)'; then echo 'Blocked: force-push from the agent is not allowed. Do it yourself if you really mean it.'; exit 2; fi; if echo \"$cmd\" | grep -qE 'git push.*( |:)(main|master)($| )'; then authors=$(git log --format='%ae' 2>/dev/null | sort -u | wc -l | tr -d ' '); if [ \"${authors:-0}\" -gt 1 ]; then echo 'Blocked: this repo has multiple contributors - do not push directly to main/master. Use a feature branch + PR.'; exit 2; fi; fi; exit 0"
+            "command": "cmd=$(jq -r '.tool_input.command // \"\"'); if echo \"$cmd\" | grep -qE 'git push.*( -f($| )| --force)'; then echo 'Blocked: force-push from the agent is not allowed. Do it yourself if you really mean it.'; exit 2; fi; if echo \"$cmd\" | grep -qE 'git push.*( |:)(main|master)($| )'; then authors=$(git log --format='%ae' 2>/dev/null | grep -Fvx 'noreply@anthropic.com' | sort -u | wc -l | tr -d ' '); if [ \"${authors:-0}\" -gt 1 ]; then echo 'Blocked: this repo has multiple contributors - do not push directly to main/master. Use a feature branch + PR.'; exit 2; fi; fi; exit 0"
           },
           {
             "type": "command",
@@ -69,12 +69,26 @@
     "type": "command",
     "command": "sh ~/.claude/statusline-command.sh"
   },
+  "extraKnownMarketplaces": {
+    "visual-explainer-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "nicobailon/visual-explainer"
+      }
+    },
+    "claude-mermaid": {
+      "source": {
+        "source": "github",
+        "repo": "veelenga/claude-mermaid"
+      }
+    }
+  },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
   "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": false,
+  "skipWorkflowUsageWarning": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
-  "skipWorkflowUsageWarning": true
+  "voiceEnabled": true
 }

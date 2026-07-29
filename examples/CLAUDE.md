@@ -106,3 +106,9 @@ Co-Work skill building: read `~/.claude/references/cowork-skill-design.md` first
 Memory system questions (what goes in which layer, consolidation): read `~/.claude/references/memory-system.md` (lazy-loaded, not @-imported)
 A check came back empty, or you are building a probe/linter/audit step: read `~/.claude/references/control-testing.md` first — nine cases where an unvalidated negative read as proof (lazy-loaded, not @-imported)
 Driving a browser: read `~/.claude/references/browser-control.md` **before picking a surface** — the Chrome extension only bridges from Google Chrome and needs the extension and the site session in the same browser profile, so it often cannot connect; Playwright is the default for logins/uploads/multi-step flows (lazy-loaded, not @-imported)
+
+## Output Shape
+
+Visual-learner output rules. Source of truth lives in the home repo.
+
+@~/path/to/home/visual-output-rules.md
