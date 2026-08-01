@@ -96,6 +96,8 @@ git status
 3. If yes, create commit with session summary
 4. If no, note that changes are intentionally uncommitted
 
+This step covers the SESSION'S work product only. Do not push here — wrap-up artifacts (learnings, HANDOVER, session log) don't exist yet. Step 12 commits those and pushes everything, always last.
+
 ### Step 6: Extract Learnings (`/compound`)
 
 Run the compound learning extraction. This reviews the session for:
@@ -107,7 +109,7 @@ Run the compound learning extraction. This reviews the session for:
 For each learning:
 1. Categorize it (correction / pattern / decision / domain)
 2. Determine scope: project-local only, or also globally useful?
-3. Append to this project's `learnings.md` using the typed format (see `~/.claude/references/learnings-format.md`)
+3. Append to this project's `learnings.md` using the typed format. **Read `~/.claude/references/learnings-format.md` first** unless you already have this session; it is lazy-loaded, not resident, so nothing else puts the format in context
 4. If globally useful, also write a `learning_<slug>.md` topic file to `~/.claude/projects/<your-home-project>/memory/` AND its MEMORY.md index line (both, same turn — /compound has the enforcement details)
 
 If the session was purely mechanical (applying known patterns, no new ground), skip this step. But check: "Did we discover anything about HOW to do this more effectively?" — that's a pattern worth capturing even if nothing went wrong.
@@ -332,6 +334,20 @@ Check the project root for `README.md`, `CHANGELOG.md`, or `ROADMAP.md`. If any 
 4. If no trigger, log it: *"Skipped doc sync, change too small."* in the wrap-up output.
 
 This step keeps human-facing docs current as part of every wrap-up; there is no separate doc-sync skill to run.
+
+### Step 12: Final Commit + Push (always last; added 2026-07-13)
+
+Nothing this skill wrote may be left uncommitted. After Steps 6-11:
+
+1. **Commit the wrap-up artifacts** in the project repo: `learnings.md`, `HANDOVER.md`, the session log, any README/CHANGELOG/ROADMAP edits from Step 11. Conventional message, e.g. `wrap-up: session log, learnings, fresh HANDOVER (<theme>)`.
+2. **Commit any brain vault writes** from Step 6.25 (`git -C ~/Documents/projects/brain add -A && commit`).
+3. **Push every repo this session committed to** (project repo, brain, ~/.claude), IF the current branch already tracks a remote (`git rev-parse --abbrev-ref @{u}` succeeds). This is the off-machine backup step — solo doc repos (home, brain, claude-config) otherwise accumulate local-only history.
+
+Push guardrails:
+- Plain `git push` only. Never `--force`, never merge, never create remotes, branches, or upstreams.
+- Code repos on a feature branch: push the feature branch; the PR flow stays manual per git-workflow.md.
+- No upstream configured, or push fails (auth, network)? Note it in the session log and move on — never block the wrap.
+- Verify with `git status -sb` per repo: each should read `## main...origin/main` with no ahead/behind marker (or the feature-branch equivalent).
 
 ---
 

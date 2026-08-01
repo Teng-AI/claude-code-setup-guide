@@ -32,7 +32,17 @@ Before anything else, check if this project has a memory system:
    - Add 1-3 topic files if the project has enough complexity (architecture, gotchas, etc.)
    - Tell the user: "Created memory for this project. Review and correct anything wrong."
 4. **Also check**: Does `learnings.md` exist in the project root? If not and this is an active project, create an empty one with the standard header.
-5. **Scan learnings.md**: Read this project's `learnings.md`. Note entries from the last 30 days — these are "hot" learnings most likely to be relevant. Hold them for Step 0.75.
+5. **Scan learnings.md titles** (not the whole file):
+
+   ```bash
+   python3 ~/.claude/scripts/recent-learnings.py ./learnings.md --days 30 --list-only
+   ```
+
+   Dated titles only, last 30 days. Hold them for Step 0.75 and read the body of an entry only when Step 0.75 picks it.
+
+   Reading the file entire costs hundreds of lines in a long-running project, and the file grows every session, so the cost rises forever while the useful part stays about the same size. Titles cut a 780-line file to roughly 90. Drop `--list-only` for full bodies, or grep the file directly; nothing is hidden, it is just not loaded by default.
+
+   The script ships at [examples/scripts/recent-learnings.py](../../../scripts/recent-learnings.py); copy it to `~/.claude/scripts/`.
 
 ### Step 0.5: Read Handover (10 seconds)
 
@@ -48,7 +58,7 @@ Check for `HANDOVER.md` in the project root:
 Match past learnings to the current session's likely work:
 
 1. **Identify the task**: From HANDOVER.md "Next step", or from the user's opening message.
-2. **Check project learnings**: Scan this project's `learnings.md` for entries relevant to the task. Match by keywords, technology, or domain. Prioritize entries from the last 30 days.
+2. **Check project learnings**: Match the task against the titles from Step 0 item 5. Read the body only of entries that actually match, rather than the file. If nothing in the last 30 days matches and the task looks like something the project hit before, grep the full file for the relevant term.
 3. **Check global learnings**: Read the home project memory index at `~/.claude/projects/<your-home-project>/memory/MEMORY.md`. Scan any `learning_*` topic files whose names or descriptions match the current task's domain.
 4. **Check other project learnings** (lightweight): If the task involves a technology that another project has learnings about, the global `learning_*` topic files are the cross-project bridge — don't read every project's learnings.md directly.
 
@@ -220,7 +230,7 @@ Pick your task, then run `/pre-implement` if it's non-trivial (>30 min, multi-fi
 
 | After Session Start | Run If... |
 |---------------------|-----------|
-| `/notion-review` | Deciding what to work on across projects |
+| `/project-roadmap` | Deciding what to work on across projects |
 | `/pre-implement` | Starting a non-trivial task |
 
 ## Tips

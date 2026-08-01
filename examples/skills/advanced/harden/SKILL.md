@@ -21,15 +21,15 @@ Run `/harden` when:
 ## Prerequisites
 
 - Feature works on happy path (manually verified)
-- `/pre-mortem` was run (failure modes identified)
+- `/pre-implement` was run (failure modes identified)
 
-If `/pre-mortem` wasn't run, quickly identify: "What are 3 ways this could fail?"
+If `/pre-implement` wasn't run, quickly identify: "What are 3 ways this could fail?"
 
 ## The Hardening Checklist
 
 ### 1. Error Handling
 
-Review failure modes from `/pre-mortem` and add handling for each:
+Review failure modes from `/pre-implement` and add handling for each:
 
 | Failure Mode | Handling Required |
 |--------------|-------------------|

@@ -62,7 +62,7 @@ Route by **purpose**, not by who wrote it. **Tiebreaker: would the answer be the
 
 - Changes Claude's behavior (tool gotchas, preferences, process) → auto-memory. Nothing else goes there.
 - World knowledge I would read myself → `brain/topics/`, which is edited forever. Dated snapshots → `brain/research/`, which is write-once. Putting a living topic in `research/` makes it immutable by accident.
-- Meetings, people, raw records → the brain raw layer, via `/process-ai-meetings`.
+- Meetings, people, raw records → the brain raw layer, via whatever pipeline feeds it.
 - Cross-project decisions → `brain/decisions.md`. Code-level decisions → that repo's `learnings.md`.
 - Global-scope lessons → the `learnings.md` entry AND the memory file AND the MEMORY.md index line, all three (`/compound` enforces this).
 - Tasks, ideas, triage → Notion. Volatile status → nowhere durable; link the live source.

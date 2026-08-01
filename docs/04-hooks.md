@@ -107,6 +107,47 @@ Any output your hook prints to stdout is shown to Claude as feedback.
 
 ---
 
+## What `examples/hooks-examples.json` Actually Ships
+
+**Read this before running `install.sh --full`.** That flag merges `hooks-examples.json` into your
+`~/.claude/settings.json`. Most of its entries are not inline shell — they call scripts by path,
+and **this repo does not ship those scripts**:
+
+| Event | Command | Shipped here? |
+|---|---|---|
+| `PreToolUse` | inline force-push / push-to-main guard | Yes, inline |
+| `PreToolUse` | `~/.claude/hooks/repo-visibility-guard.py` | No |
+| `PostToolUse` | `~/.claude/hooks/humanizer-check.sh` | No |
+| `PostToolUse` | `~/.claude/hooks/harness-lint-check.sh` | No |
+| `PreCompact` | `~/.claude/hooks/pre-compact.sh` | No |
+| `SessionStart` | `~/.claude/hooks/session-start.sh` | No |
+| `SessionStart` | `~/.claude/hooks/audit-reminder.sh` | No |
+
+A hook whose command is a path to a file that does not exist fails on every fire. After
+`--full`, either write the scripts or delete the entries you have no script for. The inline
+force-push guard is the one that works standalone.
+
+What each absent script does in the config this guide mirrors, if you want to write your own:
+
+- **`repo-visibility-guard.py`** — blocks writes of session/meta files (`HANDOVER.md`,
+  `learnings.md`, work logs, brainstorms) into a repo whose GitHub remote is public.
+- **`humanizer-check.sh`** — greps written prose against the `/humanizer` skill's
+  `ban-list.txt` and blocks on a hit. The skill and the hook read the same list file, so there
+  is no second copy to keep in sync.
+- **`harness-lint-check.sh`** — runs a reference linter on every written `CLAUDE.md`,
+  `SKILL.md`, or memory file and blocks on a dead path, skill name, or section reference.
+  See `/setup-audit` Step 1.5.
+- **`pre-compact.sh`** — archives the transcript and writes a HANDOVER.md summary before
+  compaction, unless a manual `/checkpoint` is already fresh.
+- **`session-start.sh`** — surfaces a recent HANDOVER.md after a compact or resume.
+- **`audit-reminder.sh`** — nudges when `/setup-audit` last ran more than a month ago.
+
+**The general lesson:** a hook that names a path is a dependency. Ship the script with the
+config or the config is broken on arrival — this repo documented seven hooks with the wrong
+input mechanism once, and every one of them failed silently for readers.
+
+---
+
 ## Hook Examples
 
 ### 1. Commit Reminder (PreToolUse on Bash)

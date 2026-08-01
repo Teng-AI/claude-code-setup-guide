@@ -63,6 +63,54 @@ find ~/.claude -name "CLAUDE.md" -exec wc -c {} \; 2>/dev/null | awk '{printf "~
 
 Also check `@references/` files imported by CLAUDE.md — they count toward the total.
 
+## Step 1.5: Harness Truth Check
+
+Step 1 asks whether a file is too big. This asks whether it is lying, which is the failure
+that actually bites: a "volatile state stays out of prose" rule can be written down and still
+violated across half a dozen files. Discipline does not hold, so this part is mechanical.
+
+This needs a linter you write once and keep at zero findings. Point it at every CLAUDE.md, every
+SKILL.md, `~/.claude/references/`, and every project's memory layer:
+
+```bash
+python3 ~/.claude/scripts/harness-lint.py
+```
+
+Six checks, no judgment in any of them:
+
+| Check | Catches | Scope |
+|---|---|---|
+| `dead-pointer` | a referenced path or `/skill-name` that does not resolve | all |
+| `dead-wikilink` | a `[[link]]` in a memory file resolving to nothing | memory |
+| `dead-section` | a quoted section name the named file does not have | all |
+| `visibility` | a PUBLIC/PRIVATE claim that disagrees with `gh repo view` | CLAUDE.md |
+| `stale-status` | a line restating something the sibling ROADMAP.md marks done | CLAUDE.md |
+| `location` | a root CLAUDE.md outside the two documented exceptions | CLAUDE.md |
+
+Exit 0 clean, 1 findings, 2 the linter itself broke. Treat exit 2 as a failed audit step, never
+as a pass.
+
+**This should normally report zero.** The same checks run on every write to a harness file via
+the `PostToolUse` hook `~/.claude/hooks/harness-lint-check.sh`, which blocks. A non-zero count
+here means drift arrived some way the hook cannot see: a file edited outside Claude Code, a
+target deleted after the reference was written, or a new false-positive class. Findings in the
+second category are the useful ones, since nothing else catches a reference broken by a change
+somewhere else.
+
+It says nothing about length, tone, or whether content still earns its place. Those need a human
+read against `~/.claude/references/claude-md-templates.md`. **Exit 0 means "nothing checkably
+false", not "this file is good."**
+
+**Budget for exemptions from the start.** Every real setup has deliberate violations — an
+Obsidian vault keeps its CLAUDE.md at the repo root because Obsidian cannot index dotfolders, a
+CLAUDE.md that is only an `@AGENTS.md` shim stays beside what it imports — and lines describing a
+former or external thing are history notes, not claims ("(was `contacts/`)"). A linter that fires
+on these gets bypassed, and then it protects nothing. Fix the false-positive class, never the
+finding.
+
+Note that a public template repo full of placeholder paths (like this guide's `examples/`) is
+itself an exemption case: those paths are fictional by design.
+
 ## Step 2: The Six Questions (Rule Audit)
 
 For every rule or section in each loaded CLAUDE.md, ask Jarod Taylor's six questions:
@@ -115,9 +163,15 @@ done
 
 Findings the user has reviewed and accepted on purpose. The security greps in this step (and Steps 4 and 7) check hits against this table first. Report matches as "accepted (ledger)" with the decision date. Do NOT re-litigate them every audit.
 
-| Finding | Decided by | Date | Re-open trigger |
-|---|---|---|---|
-| (example) `defaultMode: bypassPermissions` + `skipDangerousModePermissionPrompt` in settings.json | you | YYYY-MM-DD | Re-open if client work requires permission gating or this becomes a shared machine |
+The `Source` column says which check raises the finding. Rows sourced from another skill record a standing decline of that skill's proposal, so the proposal is answered once here instead of every time it appears.
+
+| Finding | Source | Decided by | Date | Re-open trigger |
+|---|---|---|---|---|
+| (example) `defaultMode: bypassPermissions` + `skipDangerousModePermissionPrompt` in settings.json | Step 3 | you | YYYY-MM-DD | Re-open if client work requires permission gating or this becomes a shared machine |
+| (example) `SessionStart` hook that surfaces HANDOVER.md after a compact or resume | Step 3 | you | YYYY-MM-DD | Re-open if the hook's command string changes |
+| (example) Proposal to replace `bypassPermissions` with auto mode, raised by the native `/doctor` check that audits the default permission mode | `/doctor` | you | YYYY-MM-DD | Re-open together with the `bypassPermissions` row above. Auto mode is the likely destination if that row's trigger ever fires, so do not disable auto mode at the settings level to silence the proposal |
+
+Start this table empty. The rows above show the shape; replace them with your own decisions.
 
 **Ledger maintenance rules:**
 - Only the human adds or removes rows. The audit may propose a row when the user dismisses the same finding twice, but never writes one itself.
@@ -144,15 +198,21 @@ For each entry:
 **Per-project sweep.** Do not stop at cwd and global. Scan every project:
 
 ```bash
-# All per-project settings.local.json files (all were deleted 2026-07-11)
-for f in ~/Documents/projects/*/.claude/settings.local.json; do
-  [ -f "$f" ] || continue
+# All per-project settings.local.json files.
+# find, not a bare glob: under zsh an unmatched glob aborts with "no matches found"
+# instead of running zero times, so the clean case would read as an error. Verified
+# 2026-07-28, after the last matching file was removed and the glob form started failing.
+find ~/Documents/projects -maxdepth 3 -path '*/.claude/settings.local.json' 2>/dev/null | while read -r f; do
   echo "=== $f ==="
   jq '.permissions // empty' "$f" 2>/dev/null
 done
 ```
 
 Any file this finds is a flag: the baseline since 2026-07-11 is zero. A new `settings.local.json` means permission prompts are happening in that project and someone clicked "don't ask again". That is a signal to consolidate the rule deliberately (into project `settings.json` or the global allowlist), not to let per-project drift rebuild.
+
+**The native `/doctor` writes to this same path.** Its check 9 aggregates denied read-only commands and proposes allow rules, and the destination it uses is exactly the file this sweep flags. Today that check is inert here: it harvests denials from permission prompts, and `bypassPermissions` produces none (verified 2026-07-28, 20 denials in the window, all `permission-rule` from blocking hooks, zero `user-rejected`). **Re-open trigger: `defaultMode` ever leaves `bypassPermissions`.** At that point check 9 gains fuel, and this baseline needs a rule for rules it wrote itself rather than a blanket flag.
+
+**Interpreter and destructive wildcards are High severity, not Medium.** `python3:*`, `node:*`, `npx:*`, and `rm:*` put arbitrary execution or deletion behind one standing pre-approval. Check 9 refuses to propose that class at all, so anything of this shape arrived by a human clicking through a prompt. These also come back: a file carrying `python3:*` and `rm:*` once reappeared four days after the baseline reset that was supposed to clear it.
 
 **Known issue:** deny rules are unreliable (anthropics/claude-code#18160). Do not treat `settings.json` deny lists as a security boundary — they may not be honored for Read/Write tools. Use allowlist + explicit revoke.
 
@@ -193,18 +253,48 @@ For each stale skill, ask:
 
 **Archive before delete.** Move to `~/.claude/skills/_archive/` so the description no longer loads at session start but the skill is recoverable. Delete only after a second audit confirms it stayed untouched.
 
+### Forked-skill upstream drift
+
+Any skill you forked from someone else's repo drifts. The `/humanizer` skill here is a fork of `blader/humanizer`, which ships in roughly monthly bursts; three releases once went unnoticed until the next manual look.
+
+Keep a pin file recording the upstream commit you last reviewed, and check it on every audit: fetch upstream, diff `SKILL.md` since the pin, and review each change take-or-skip before advancing the pin. Make advancing the pin a separate explicit flag — re-pinning on sight turns the check into a rubber stamp. A failed check (network, missing tools) is not evidence about upstream, so give it a distinct exit code. GitHub release-watch on the upstream repo is the primary signal; this step is the backstop for when that email gets buried.
+
+### Duplicated-rule drift
+
+Any rule file you keep in one canonical place and copy into several repos will drift. Pick the direction of truth once, script the copy, and give the script a `--check` mode that the audit runs. Exit non-zero listing the drifted repos. If a copy holds an improvement, port it back to the source first, then re-sync — never let the copy win silently.
+
 **Skill usage counts come from transcripts** (proven 2026-07-08 — no logging hook needed). Two greps, because Skill-tool calls and user-typed slash commands are recorded differently:
 
 ```bash
 # Skill tool invocations (last 90 days)
 find ~/.claude/projects -name "*.jsonl" -mtime -90 -size +1k 2>/dev/null | \
-  xargs grep -ho '"skill":"[a-zA-Z0-9_-]*"' 2>/dev/null | sort | uniq -c | sort -rn
+  xargs grep -ho '"skill":"[a-zA-Z0-9_:.-]*"' 2>/dev/null | sort | uniq -c | sort -rn
 # User-typed slash commands
 find ~/.claude/projects -name "*.jsonl" -mtime -90 -size +1k 2>/dev/null | \
-  xargs grep -ho '<command-name>/[a-zA-Z0-9_-]*' 2>/dev/null | sed 's|.*<command-name>||' | sort | uniq -c | sort -rn
+  xargs grep -ho '<command-name>/[a-zA-Z0-9_:.-]*' 2>/dev/null | sed 's|.*<command-name>||' | sort | uniq -c | sort -rn
 ```
 
+**The colon in those character classes is load-bearing.** Skills delivered by a plugin are named `plugin:skill`, and a class without `:` cannot match one, so it returns zero for every plugin skill no matter how often it runs. Under the archive rule below, that made all of them permanent false candidates. Verified 2026-07-28: the old pattern found 0 namespaced skills over 90 days, the fixed pattern found 3. A probe that structurally cannot match reports absence, not evidence.
+
 Skills with zero hits in both lists over 90 days are archive candidates — subject to the reference check above (a "dead" skill chained from a hook or another skill isn't dead; grep settings.json and other SKILL.md files before archiving).
+
+### Plugins
+
+A plugin bundles skills, commands, hooks, and MCP servers together, so an unused one costs listing entries plus a thing to keep authenticated and updated. `enabledPlugins` in settings is **not** an inventory: it records only what was enabled at user scope, and most installed plugins never appear there. Use the usage counter.
+
+```bash
+# Lifetime plugin usage, summed across marketplace keys
+jq -r '.pluginUsage // {} | to_entries[] | "\(.key|split("@")[0])\t\(.value.usageCount // 0)"' ~/.claude.json 2>/dev/null | \
+  awk -F'\t' '{n[$1]+=$2} END {for (p in n) printf "%6d  %s\n", n[p], p}' | sort -rn
+```
+
+**Sum across marketplace keys or the answer is wrong.** The same plugin is counted once per marketplace it was installed from, so a per-key read splits one plugin into two rows and makes the smaller one look abandoned. As of 2026-07-28 `slack` read 354 under one key and 13 under the other, against 367 combined.
+
+**`usageCount` is a lifetime total, never windowed.** It answers "was this ever used", not "was this used recently". Window evidence comes from the Step 6 transcript grep above, where plugin skills appear as `plugin:skill`, which is the other reason the colon fix matters.
+
+**`lastUsedAt` is not usage evidence.** It is seeded when the plugin is installed or enabled and refreshed on re-enable, so for a plugin sitting at zero it records arrival, not use.
+
+A plugin at a lifetime zero is an archive candidate on the same terms as a skill. Disabling is reversible.
 
 ## Step 6.5: Memory Hygiene
 
@@ -217,11 +307,17 @@ for d in ~/.claude/projects/*/memory; do
   echo "$(wc -l < "$d/MEMORY.md" | tr -d ' ') lines  $(wc -c < "$d/MEMORY.md" | tr -d ' ') bytes  $(basename $(dirname "$d"))"
 done | sort -rn -k2
 
-# Orphans: files no index line points to are invisible to recall
+# Orphans: files no index line points to are invisible to recall.
+# A redirect stub is NOT an orphan. MEMORY.md states that unlisted files are deliberate
+# stubs whose content moved to brain/topics/ or a reference, and says not to re-index them.
+# Without this exclusion the check reported all 21 stubs as orphans, and that false finding
+# survived three audits (5 "orphans" on 07-11, 22 on 07-25) before anyone opened the files.
 for d in ~/.claude/projects/*/memory; do
   [ -f "$d/MEMORY.md" ] || continue
   ( cd "$d" && for f in *.md; do [ "$f" = MEMORY.md ] && continue
-      grep -q "$f" MEMORY.md || echo "ORPHAN $(basename $(dirname $PWD)): $f"; done )
+      grep -q "$f" MEMORY.md && continue
+      grep -qiE "moved to|absorbed into|redirect stub|→ *promoted to" "$f" && continue
+      echo "ORPHAN $(basename $(dirname $PWD)): $f"; done )
 done
 
 # Oversized learnings.md files (consolidate past ~250 lines)
@@ -229,11 +325,32 @@ find ~/Documents/projects -maxdepth 2 -name "learnings.md" -exec wc -l {} \; 2>/
 
 # Uncommitted memory drift
 cd ~/.claude && git status --short projects/ | wc -l
+
+# Memory belonging to a dead project (the demotion trigger). Match on the encoded dir name,
+# which is the path with BOTH "/" and "_" turned into "-": a project dir named my_project
+# encodes as ...-projects-my-project. Comparing against literal names reports every project
+# with an underscore in it as an orphan.
+python3 - <<'EOF'
+from pathlib import Path
+ws = Path.home()/"Documents"/"claude"; proj = Path.home()/".claude"/"projects"
+enc = lambda s: s.replace("/", "-").replace("_", "-")
+live = {enc(p.name) for p in ws.iterdir() if p.is_dir() and p.name != "_archive"}
+arch = {enc(p.name) for p in (ws/"_archive").iterdir() if p.is_dir()} if (ws/"_archive").is_dir() else set()
+for d in sorted(proj.iterdir()):
+    files = list((d/"memory").glob("*.md")) if (d/"memory").is_dir() else []
+    if not files: continue
+    if any(d.name.endswith("-"+c) for c in live): continue
+    hit = next((c for c in arch if d.name.endswith("-"+c)), None)
+    print(f"  DEAD PROJECT MEMORY: {d.name} ({len(files)} files)"
+          f"{' -> _archive/'+hit if hit else ' -> no project dir at all'}")
+EOF
 ```
 
 **Flags:** any MEMORY.md over 160 lines or 20KB (80% of the load cap); any orphans; duplicate section headers; learnings.md over 250 lines; a growing pile of uncommitted memory changes (wrap-up Step 6.5.4 should be catching these).
 
-**Fix path:** run a consolidation pass — merge duplicates, index orphans, move fat content out of the index into topic files (verbatim — never summarize it away), convert relative dates to absolute, delete contradicted facts. Use `/consolidate-memory` if available, or say "consolidate my memory files" to trigger the native dream pass.
+**Fix path:** run a consolidation pass — merge duplicates, index orphans, move fat content out of the index into topic files (verbatim — never summarize it away), convert relative dates to absolute, delete contradicted facts. Say "consolidate my memory files" to trigger the native dream pass.
+
+**Dead-project memory is a separate fix, and it is not a delete.** Per the demotion rule in `~/.claude/references/memory-system.md`, a project moving to `_archive/` collapses its memory to a stub. Before collapsing, read the files: some hold cross-project knowledge that outlives the project and should be promoted to home memory or `brain/topics/` first. Deleting them wholesale loses that. The probe above is the live list, so do not restate its output here; naming specific projects in this file would go stale the moment they are collapsed. Get the user's call before collapsing any new one.
 
 ## Step 6.6: References Orphan Check
 
@@ -275,12 +392,18 @@ for d in ~/Documents/projects/*/; do
   [ -d "$d/.git" ] || continue
   repo=$(cd "$d" && gh repo view --json visibility -q .visibility 2>/dev/null)
   [ "$repo" = "PUBLIC" ] || continue
-  hits=$(cd "$d" && git ls-files | grep -E '(^|/)(HANDOVER\.md|learnings\.md|brainstorms/)|\.claude/work-logs' )
+  hits=$(cd "$d" && git ls-files | grep -E '(^|/)(HANDOVER( [0-9]+| \([0-9]+\))?\.md|learnings( [0-9]+| \([0-9]+\))?\.md|brainstorms/)|\.claude/work-logs' )
   [ -n "$hits" ] && printf 'LEAK in %s:\n%s\n' "$d" "$hits"
 done
 ```
 
 Any hit is a **Critical** finding: remove the file from tracking, then decide whether git history needs scrubbing (it usually does if the file held session state or client names).
+
+**Control-tested 2026-07-29, both directions.** A fixture repo under `~/Documents/projects/` with a public remote, holding `HANDOVER.md`, `docs/HANDOVER.md`, `learnings.md`, `brainstorms/`, and `.claude/work-logs/`: every one surfaced. Removed, and the probe went silent with a clean exit, so the empty case is covered too. Five decoys (`README.md`, `docs/handover-notes.md`, `learnings-format.md`, `docs/HANDOVER-template.md`, `CHANGELOG.md`) stayed silent in both runs. Note the fixture needs no push: `git ls-files` reads the index, so staging is enough and nothing is ever published.
+
+**The regex was widened as a result.** The original used exact names and therefore missed cloud-sync conflict copies, so a tracked `HANDOVER 2.md` in a public repo read as clean. That is the same failure `learning_gitignore-conflict-copies-and-overbroad.md` recorded on 2026-07-25, when the gitignore block was globbed for this exact reason; this probe was not updated at the same time. The pattern now also matches ` 2` and ` (1)` suffixes, deliberately narrow rather than `HANDOVER.*\.md`, which would fire on legitimate template and format docs.
+
+**Two known blind spots, both still open.** A public repo with no local clone is invisible, since the loop globs `~/Documents/projects/*/` (both public repos are cloned today, so this is latent). And a lowercase `handover.md` would not match; it cannot be tested on macOS, where the case-insensitive filesystem collapses it into `HANDOVER.md`, but a repo cloned on Linux could carry both.
 
 ## Step 7: Hook Safety Review
 
@@ -313,17 +436,22 @@ For each **non-blocking** hook in settings.json (echoes advice and exits 0, rath
 2. **Conversions:** grep for the skill or action the message suggests being invoked afterward.
 
 ```bash
-# Example, for the high-stakes UserPromptSubmit warning that suggests /pre-implement:
-# 1. How often did it fire? (use a distinctive substring of the hook's echoed message)
+# Substitute FIRED with a distinctive substring of the hook's echoed message.
+# The example below measures a hook that suggests running pre-implement.
+# 1. How often did it fire?
 find ~/.claude/projects -name "*.jsonl" -mtime -90 -size +1k 2>/dev/null | \
-  xargs grep -l 'High-stakes task detected' 2>/dev/null | wc -l
+  xargs grep -l 'FIRED' 2>/dev/null | wc -l
 # 2. In how many of those same sessions was the suggested action taken?
 find ~/.claude/projects -name "*.jsonl" -mtime -90 -size +1k 2>/dev/null | \
-  xargs grep -l 'High-stakes task detected' 2>/dev/null | \
+  xargs grep -l 'FIRED' 2>/dev/null | \
   xargs grep -l '"skill":"pre-implement"\|<command-name>/pre-implement' 2>/dev/null | wc -l
 ```
 
+If the suggested action is delivered by a plugin, its name carries a colon (`plugin:skill`), so match that exact string rather than the bare name.
+
 Session-level counting (grep -l, then compare file lists) beats raw hit counting: one session where the warning fired 5 times and the skill ran once is a conversion, not 20% of one.
+
+This step used to hard-code the high-stakes planning nudge as its worked example. That hook was retired 2026-07-25 after firing in 71 sessions and converting in 5, which is this check doing its job, so the example is now a template rather than a pointer at something that no longer exists.
 
 **Verdicts:**
 - Fires often (10+ sessions), converts near zero: ceremony. Flag for deletion.
@@ -337,9 +465,11 @@ Session-level counting (grep -l, then compare file lists) beats raw hit counting
 claude --version 2>/dev/null
 ```
 
-Compare against the [Claude Code changelog](https://docs.claude.com/en/docs/claude-code/changelog). Flag any security-related entries since the last audit. The v2.1.90 deny-rule bypass fix (post-source-leak) is the canonical example of why version drift matters in a way `npm audit` doesn't cover.
+The report header needs that number. **Whether it is the newest available is not this step's job.** The native `/doctor` resolves the release channel and compares against the right endpoint for the install type, including the Homebrew case where the cask name picks the channel instead of settings. A second implementation here would drift against it silently.
 
-Also suggest the user run `/doctor` in their next session if the built-in diagnostic hasn't run recently.
+What this step owns is the part `/doctor` does not do: read the [Claude Code changelog](https://docs.claude.com/en/docs/claude-code/changelog) and flag security-related entries since the last audit. The v2.1.90 deny-rule bypass fix (post-source-leak) is the canonical example of why version drift matters in a way `npm audit` doesn't cover.
+
+**When the version moved since the last audit, re-read the `/doctor` rows** in the Accepted Exceptions Ledger and in the division of labor below. `/doctor` ships inside the binary, so its check numbering, skip conditions, and destinations can change with any release, and no local check can detect that. The changelog read is the only moment this setup would notice.
 
 ## Output Format
 
@@ -395,6 +525,8 @@ Produce a report with two cuts: **buckets** (sam-illingworth's taxonomy) and **p
 | User skills | X | — | info |
 | Stale skills (>90d) | X | — | review |
 | Skills unused 90d (transcript grep) | X | — | archive candidates |
+| Plugins installed | X | — | info |
+| Plugins at lifetime zero use | X | 0 | archive candidates |
 | Largest MEMORY.md | X bytes | 20KB (80% of cap) | ok / consolidate |
 | Memory orphans | X | 0 | ok / flag |
 | learnings.md over 250 lines | X | 0 | ok / consolidate |
@@ -418,11 +550,30 @@ date +%Y-%m-%d > ~/.claude/.last-setup-audit
 
 ## Anti-patterns
 
-- **Don't trim CLAUDE.md blind.** HN user dataviz1000 benchmarked aggressive trimming across 30 coding tasks and found it *worsened* results. Before cutting >20% of any CLAUDE.md, run 3-5 representative tasks on both versions and compare. The golden rule applies: don't skip planning.
+- **Don't trim CLAUDE.md blind.** HN user dataviz1000 benchmarked aggressive trimming across 30 coding tasks and found it *worsened* results. Before cutting >20% of any CLAUDE.md, run 3-5 representative tasks on both versions and compare. The golden rule from your CLAUDE.md applies: don't skip planning.
 - **Don't trust deny rules for security.** They're unreliable. Use allowlist + revoke.
 - **Don't delete stale skills on the first audit.** Archive to `_archive/`, re-audit next month, delete if still untouched.
 - **Don't run this every session.** Output gets boring, findings feel routine, you'll start ignoring them. Monthly + triggered is the sweet spot.
 - **Don't edit files during the audit.** This skill reports. The user decides and acts. (Exception: the `.last-setup-audit` timestamp file.)
+
+## Division of labor with the native `/doctor`
+
+`/doctor` is a preset skill compiled into the Claude Code binary, not an installed one, so it updates when Claude Code does and cannot be edited here. It optimizes the harness and applies fixes behind confirmation gates. This skill polices the harness and edits nothing. The overlap is smaller than the names suggest, because in most shared areas the two ask different questions of the same object.
+
+| Area | `/doctor` asks | This skill asks |
+|---|---|---|
+| CLAUDE.md | Is it derivable from the code? Can it be lazy-loaded? | Is it too long? Is it checkably false? (Step 1.5) |
+| Hooks | Does it block the loop? (timing from transcripts) | Can it hurt us? (Step 7) Does it convert? (Step 7.5) |
+| Permissions | What should be added so prompts stop | What accumulated that should not have (Step 4) |
+| MCP | Is it unused? | Is it in the right scope? (Step 5) |
+| Extensions | Lifetime usage counters, current project | 90-day window, every project (Step 6) |
+| Version | Is it current? | Did anything security-related ship? (Step 8) |
+
+**Only `/doctor` covers**: installation health (duplicate installs, PATH, unparseable settings files), colliding agent definitions, hook timing, and migrating always-loaded content to lazy loading.
+
+**Only this skill covers**: the CVE grep, hook command safety, memory hygiene, references orphans, public-repo meta-file leaks, harness-lint, and every cross-project sweep. `/doctor` edits project files in the current directory only, which is why the sweeps stay here.
+
+**Standing declines** (see the Accepted Exceptions Ledger): its auto-mode proposal is answered there once. Its allow-rule proposal is inert while `defaultMode` is `bypassPermissions`, because there are no prompt denials to harvest.
 
 ## Integration with Other Skills
 

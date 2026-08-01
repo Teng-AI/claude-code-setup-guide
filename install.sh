@@ -25,6 +25,7 @@ ADVANCED_SRC="$SCRIPT_DIR/examples/skills/advanced"
 HOOKS_SRC="$SCRIPT_DIR/examples/hooks-examples.json"
 SETTINGS_SRC="$SCRIPT_DIR/examples/settings.json"
 PR_TEMPLATE_SRC="$SCRIPT_DIR/examples/PULL_REQUEST_TEMPLATE.md"
+SCRIPTS_SRC="$SCRIPT_DIR/examples/scripts"
 
 STARTER_SKILLS=(
     "session-start"
@@ -307,8 +308,42 @@ install_settings() {
     log_info "to true in $CLAUDE_DIR/settings.json for a faster workflow."
 }
 
+install_scripts() {
+    echo ""
+    echo "Installing helper scripts..."
+    echo ""
+
+    if [ ! -d "$SCRIPTS_SRC" ]; then
+        log_warn "Scripts directory not found at: $SCRIPTS_SRC"
+        return 0
+    fi
+
+    local dest_dir="$CLAUDE_DIR/scripts"
+    mkdir -p "$dest_dir"
+
+    local installed=0
+    for src in "$SCRIPTS_SRC"/*; do
+        [ -f "$src" ] || continue
+        local name
+        name="$(basename "$src")"
+        if [ -f "$dest_dir/$name" ] && [ "$FORCE" = false ]; then
+            log_skip "scripts/$name already exists (use --force to overwrite)"
+            continue
+        fi
+        cp "$src" "$dest_dir/$name"
+        chmod +x "$dest_dir/$name"
+        log_ok "scripts/$name"
+        installed=$((installed + 1))
+    done
+
+    if [ "$installed" -eq 0 ]; then
+        log_info "No new scripts installed."
+    fi
+}
+
 install_full() {
     install_advanced_skills
+    install_scripts
     install_hooks
     install_templates
     install_settings

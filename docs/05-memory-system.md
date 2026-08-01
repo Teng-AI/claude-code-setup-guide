@@ -74,6 +74,26 @@ Session observation -> (`/compound`) -> `learnings.md` entry -> (globally useful
 
 At each hop the lower entry collapses to a pointer ("-> promoted to X") so knowledge never lives in two places.
 
+## The Demotion Ladder
+
+Promotion without removal ratchets: the index grows forever until it hits its load cap and
+silently truncates. Removal needs its own rule, and it is **event-driven, never time- or
+usage-based**:
+
+- **Superseded on write.** A new fact that contradicts an existing one *replaces* it. Delete the
+  losing text and write the winner in its place; do not append and date-stamp both. Two entries
+  that disagree leave the reader unable to tell which won. `/compound` checks for this before
+  writing, not after.
+- **Project dies.** When a project moves to `_archive/`, its memory collapses to a pointer stub.
+  Read the files first — some hold cross-project knowledge that should be promoted to home memory
+  before the rest collapses.
+- **Genuinely different cases are not contradictions.** "It behaves this way when X" and "this way
+  when Y" are two facts; keep both and make the distinguishing condition explicit in each.
+
+**Never prune by age or by "unused."** The rarely-retrieved entries are the highest-value ones
+here — that is the whole point of writing them down — so a decay policy deletes exactly the files
+you wrote the system for.
+
 ## Lifecycle: What Runs When
 
 | Moment | What runs | Manual or auto |

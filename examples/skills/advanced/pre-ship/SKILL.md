@@ -28,7 +28,6 @@ Before running this checklist, verify these were completed:
 | Skill | Required If... | Completed? |
 |-------|----------------|------------|
 | `/pre-implement` | Task was non-trivial | [ ] |
-| `/state-audit` | Feature has state | [ ] |
 | `/harden` | Feature has external deps | [ ] |
 | `/test-gaps` | Feature has logic | [ ] |
 | `/docs-sync` | Files were changed | [ ] |
@@ -103,7 +102,7 @@ Before running this checklist, verify these were completed:
 - [ ] **Auth required** for protected endpoints
 - [ ] **CORS/CSP** configured appropriately
 
-For thorough security review, run `/security-check`.
+For a thorough security review, run `/harden`.
 
 ### 8. User Experience
 
@@ -122,7 +121,6 @@ For thorough security review, run `/security-check`.
 | Skill | Status |
 |-------|--------|
 | /pre-implement | ✅ Completed |
-| /state-audit | ✅ Completed |
 | /harden | ✅ Completed |
 | /test-gaps | ✅ Completed |
 | /docs-sync | ⚠️ Skipped (no doc changes needed) |

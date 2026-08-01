@@ -82,7 +82,9 @@ When in doubt on scope, keep it project-local. It can always be promoted later.
 
 ### 3. Write to learnings.md
 
-Append to the project's `learnings.md` using the format from `~/.claude/references/learnings-format.md`. Create the file if it doesn't exist.
+**Read `~/.claude/references/learnings-format.md` now** if you have not already this session. It defines the four entry types, the scope rule, and the append-only constraint. It is no longer loaded at session start, so this read is the only thing that puts the format in context.
+
+Append to the project's `learnings.md` using that format. Create the file if it doesn't exist.
 
 ### 4. Bridge globals to home memory
 
@@ -91,7 +93,7 @@ If scope is global, BOTH steps are required — a file without an index line is 
 1. Write a topic file to `~/.claude/projects/<your-home-project>/memory/learning_<slug>.md`
    - `<slug>` = kebab-case of the learning title
    - Frontmatter: `name`, `description`, `type: reference`, `source_project`, `source_date`
-2. Add a one-line entry to the "Cross-Project Learnings" section of that MEMORY.md — in the same tool-use turn as step 1, never deferred
+2. Add a one-line entry to that MEMORY.md under the matching subsection of "Learnings by domain" (Verification discipline, Notion, Sheets, and so on; add a subsection only if none fits) — in the same tool-use turn as step 1, never deferred
 3. Verify before finishing: `grep <slug> MEMORY.md` returns the new line. If not, the bridge is incomplete; fix it before reporting the learning as captured.
 
 **Example global topic file:**
@@ -107,7 +109,27 @@ source_date: 2026-03-24
 MCP Notion server only supports `paragraph` and `bulleted_list_item` block types. For headings, callouts, dividers, toggles, tables, code blocks, and file uploads, use direct `curl` calls to the Notion API. See `~/.claude/references/notion-api.md` for patterns.
 ```
 
-### 5. Check for promotion candidates
+### 5. Check for supersession (before writing, not after)
+
+Capture used to be purely additive, so a corrected belief landed *beside* the old one instead of replacing it. Two entries then disagree and the reader cannot tell which won.
+
+For each learning about to be written, search the layer it is going into for what it contradicts:
+
+```bash
+grep -ril "<3-4 distinctive keywords from the new learning>" \
+  ~/.claude/projects/*/memory/ path/to/learnings.md
+```
+
+If something comes back that the new learning contradicts:
+
+- **Delete the losing text and write the winner in its place.** Do not append and date-stamp both.
+- Keep whatever remains true from the old entry, merged into the new one. Supersession replaces a claim, not necessarily a whole file.
+- If the old entry lives one layer up (a memory file, a CLAUDE.md rule), say so and stop. Editing an instruction is the user's call, not an automatic one.
+- If it is genuinely a different case rather than a contradiction, keep both and make the distinguishing condition explicit in each. "It behaves this way when X" and "this way when Y" are two facts. "It behaves this way" written twice with different answers is one fact and a stale copy.
+
+Removal is event-driven only: something contradicted it, or its project died. **Never delete a memory because it looks old or unused.** The rarely-retrieved entries are the highest-value ones here, so an age or usage rule deletes exactly the wrong files.
+
+### 6. Check for promotion candidates
 
 If a global learning has been surfaced in 3+ sessions or has grown into substantial reference material, flag it:
 

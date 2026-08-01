@@ -15,7 +15,7 @@ Before writing tests, verify:
 |--------------|-------|------------|
 | Feature works on happy path | Manually tested | Fix bugs first |
 | `/harden` was run | Error handling exists | Run `/harden` first |
-| Failure modes identified | From `/pre-mortem` | Review what can fail |
+| Failure modes identified | From `/pre-implement` | Review what can fail |
 
 **Testing unhardened code misses failure cases.** If `/harden` wasn't run and the feature has external dependencies, run it first.
 
@@ -96,7 +96,7 @@ describe('calculateTotal', () => {
 
 **STOP. After writing happy path tests, ask yourself:**
 
-- [ ] What are the 3 failure modes from `/pre-mortem`? Did I test each?
+- [ ] What are the 3 failure modes from `/pre-implement`? Did I test each?
 - [ ] What happens with bad input? Empty input? Null input?
 - [ ] What happens when external services fail?
 - [ ] What would a malicious or confused user do?

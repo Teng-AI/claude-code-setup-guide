@@ -16,7 +16,7 @@ Based on Matt Pocock's grill-me with Nate Herk's checkpoint upgrade.
 3. Seed the file with this header:
 
 ```markdown
-# {Topic} — Grill Session
+# {Topic}: Grill Session
 Date: {date} | Goal: {one line}
 
 ## Key decisions
@@ -51,7 +51,7 @@ Never batch multiple answers into one write. The point is surviving context loss
 ### Q&A entry format
 
 ```markdown
-### Q{n} — {topic}
+### Q{n}. {topic}
 - Asked: {question}
 - Answer: {decision, facts, exact wording worth keeping}
 - Flags: {open item → owner, or "None"}

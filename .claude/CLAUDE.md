@@ -3,7 +3,7 @@
 ## What it is
 
 A public, opinionated guide to setting up Claude Code (skills, hooks, memory, project config),
-published from Teng's real config. Readers clone it and run `./install.sh`.
+published from the maintainer's real config. Readers clone it and run `./install.sh`.
 
 ## Stack
 
@@ -31,7 +31,7 @@ Markdown docs plus a bash installer. No build, no dependencies, no tests.
   A wrong claim here fails silently for readers: seven hook recipes documented `$TOOL_INPUT` and
   friends as the input mechanism when hooks actually read JSON from stdin, so anyone running
   `install.sh --full` got hooks that never fired once. Check against the shipped binary, not docs.
-- **`install.sh` must work on a machine that has none of Teng's setup.** It cannot assume any
+- **`install.sh` must work on a machine that has none of the maintainer's setup.** It cannot assume any
   `~/.claude/references/` file exists; the repo ships none.
 
 ## Pointers

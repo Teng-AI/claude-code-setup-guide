@@ -1,0 +1,118 @@
+# humanizer ban list
+# Single source of truth for BOTH ~/.claude/hooks/humanizer-check.sh and the Pass 1
+# list in ~/.claude/skills/humanizer/SKILL.md. Extracted from the hook 2026-07-29,
+# ending the two-copy drift that the 2026-07-11 audit found and the 07-12 union patched
+# by hand. Edit here and nowhere else.
+#
+# Sections are load-bearing: the hook applies different grep flags per section.
+#   [vocab]        word-bounded, case-insensitive
+#   [phrases]      word-bounded, case-insensitive
+#   [exclamations] substring, case-insensitive (patterns end in '!')
+#   [transitions]  case-SENSITIVE, sentence-initial only
+#   [structure]    substring, case-insensitive
+#
+# Blank lines and # comments are ignored. One term per line. Keep terms literal
+# (a trailing ? for plural forms is fine), EXCEPT [structure], which carries real
+# regex: its word-boundary anchors exist because a bare pattern once matched inside
+# "does not justify" and blocked a legitimate write.
+
+[vocab]
+delve
+delves
+delved
+delving
+tapestry
+testament
+unwavering
+pivotal
+fosters?
+fostering
+underscores?
+underscoring
+embarks?
+embarking
+endeavors?
+nuanced
+multifaceted
+intricate
+intricately
+vibrant
+crucial
+crucially
+showcases?
+showcased
+showcasing
+enduring
+enhances?
+enhanced
+enhancing
+garners?
+garnered
+garnering
+interplay
+landscapes?
+nestled
+seamless
+seamlessly
+groundbreaking
+breathtaking
+stunning
+renowned
+boasts?
+boasting
+profound
+exemplifies
+exemplified
+exemplifying
+must-visit
+game-changing
+game changer
+revolutionize
+revolutionizes
+revolutionizing
+unprecedented
+meticulously
+skyrockets?
+skyrocketed
+skyrocketing
+disruptive
+innovative
+master
+unlocks?
+unlocked
+unlocking
+
+[phrases]
+in the heart of
+it is worth noting
+commitment to
+great question
+i hope this helps
+elevate your
+unlock the
+as of my last update
+you're absolutely right
+would you like
+let me know
+here is a
+
+[exclamations]
+of course!
+certainly!
+
+[transitions]
+Furthermore
+Moreover
+Additionally
+In conclusion
+Consequently
+Subsequently
+Accordingly
+Notably
+Significantly
+Indeed
+
+[structure]
+—
+\bnot only\b
+\bnot just\b

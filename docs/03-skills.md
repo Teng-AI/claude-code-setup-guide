@@ -1,6 +1,6 @@
 # Skills
 
-> **Revision note (July 2026).** A transcript audit of the live config found the code-project chain skills (/learn, /harden, /test-gaps, /docs-sync, /pre-ship, /debug, /fresh-eyes, /refactor, /pre-mortem) had zero to two uses in 90 days once the work shifted from code to knowledge/ops. They were archived with re-add triggers, and /pre-mortem was folded into /pre-implement as a required step. The catalog below now leads with the knowledge/ops workflow the live config actually runs; the code chain remains shipped and documented under "Code-Project Chain" because the skills are sound for code-heavy work. The meta-lesson travels with them: prune skills against measured usage, and archive rather than delete so a trigger can bring them back.
+> **Revision note (July 2026).** A transcript audit of the live config found the code-project chain skills (/learn, /harden, /test-gaps, /docs-sync, /pre-ship, /debug, /fresh-eyes, /refactor, /pre-mortem) had zero to two uses in 90 days once the work shifted from code to knowledge/ops. They were archived with re-add triggers, and /pre-mortem was folded into /pre-implement as a required step. Two of them (/fresh-eyes, /learn) have since been deleted from the live config outright, having stayed untouched through a second audit; they remain shipped here, which is the point of archiving rather than deleting. The catalog below now leads with the knowledge/ops workflow the live config actually runs; the code chain remains shipped and documented under "Code-Project Chain" because the skills are sound for code-heavy work. The meta-lesson travels with them: prune skills against measured usage, and archive rather than delete so a trigger can bring them back.
 
 ## What Are Skills?
 
@@ -128,7 +128,9 @@ The daily loop: `/grill-me` (if the idea is fuzzy) -> do the work -> `/checkpoin
 | `/plain` | Re-explain the current technical topic in plain English, anchored in the live example in the conversation. | When jargon piles up or layered concepts blur together. | Beginner |
 | `/show-me` | Build a visual (diagram, table, timeline, widget) to explain the current topic. Sibling of `/plain`: that one fixes the words, this one fixes the shape. | When an explanation involves 3+ interacting parts or a multi-step flow. | Beginner |
 | `/deck-review` | Review an investor pitch deck across positioning, narrative flow, consistency, and fundability. | Before sending a deck, or when giving deck feedback. | Advanced |
-| `/open` | Find and open a file by fuzzy name match. | When you know roughly what a file is called but not where it lives. | Beginner |
+| `/open` | Find and open a file by fuzzy name match, surfaced inside Claude Code rather than handed to another app. | When you know roughly what a file is called but not where it lives. | Beginner |
+| `/loose-ends` | Sweep the current conversation for unresolved items and rank them. Recall-only: no writes, no fixes. | Returning from a tangent, or before closing out a session. | Beginner |
+| `/tighten` | Compress one long document without losing information: diagnose why it is long, index every fact, cut, then verify nothing dropped. | When a doc sprawls. Use `/tidy` for a folder, `/humanizer` for voice. | Intermediate |
 
 ---
 
@@ -176,7 +178,7 @@ Older skills kept as construction references. Useful patterns, but not part of t
 | `/performance-audit` | Performance analysis for web apps. | When investigating slow pages or interactions. | Advanced |
 | `/architecture-review` | Codebase health check and infrastructure maturity assessment. | During project planning or quarterly reviews. | Advanced |
 | `/design-review` | Visual design review covering hierarchy, typography, color, and layout. | When reviewing UI changes. | Advanced |
-| `/qa` | QA test a web application: find bugs and fix them (diff-aware, full, or quick mode). | Before launching or after major UI changes. | Advanced |
+| `/website-qa` | Check a site for bugs, broken links, typos, responsive issues, and accessibility problems. | Before launching or after major UI changes. | Advanced |
 | `/doc-write` | Write new documentation from scratch. | When creating docs for a new feature or project. | Intermediate |
 | `/project-scaffolding` | Set up new projects with sensible defaults. | When starting a new project. | Intermediate |
 | `/prompt-refiner` | Improve and optimize prompts. | When a prompt is not producing good results. | Advanced |
@@ -186,6 +188,20 @@ Older skills kept as construction references. Useful patterns, but not part of t
 
 ---
 
+## Skills That Ship a Script
+
+Three skills here carry more than a `SKILL.md`, and the extra files have to be copied too:
+
+| Skill | Extra files | Note |
+|---|---|---|
+| `/humanizer` | `ban-list.txt`, `voices/` | The ban list is the single source of truth shared with the `humanizer-check.sh` hook. Write your own voice profiles; see `voices/README.md`. |
+| `/tidy` | `scripts/check_docs.py` | Link and structure checks. |
+| `/tighten` | `scripts/check_tighten.py` | Verifies no fact dropped between the before and after doc. |
+
+`/session-start` also calls `examples/scripts/recent-learnings.py`, which belongs in
+`~/.claude/scripts/` rather than inside a skill directory. Without it, that step reads the whole
+`learnings.md` instead of just recent titles — slower and much more context, but not broken.
+
 ## Recommended Learning Path
 
 **Stage 1: Core loop** -- session-start, pre-implement, wrap-up. Get the open-work-close rhythm habitual first.
@@ -194,4 +210,4 @@ Older skills kept as construction references. Useful patterns, but not part of t
 
 **Stage 3: Better inputs** -- grill-me before building, fool before deciding, humanizer before sending.
 
-**Stage 4: Extend by domain** -- plain, show-me, deck-review, and the maintenance skills (setup-audit, tidy) as your setup grows. Add the code-project chain if your work is code-heavy.
+**Stage 4: Extend by domain** -- plain, show-me, deck-review, loose-ends, tighten, and the maintenance skills (setup-audit, tidy) as your setup grows. Add the code-project chain if your work is code-heavy.
