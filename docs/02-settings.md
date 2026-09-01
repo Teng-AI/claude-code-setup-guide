@@ -24,6 +24,8 @@ The split exists so you can share your general configuration while keeping permi
 | `skipDangerousModePermissionPrompt` | boolean | Skip confirmation before potentially destructive commands. **This is the single biggest quality-of-life setting** -- once you trust your allow/deny lists, flipping this to `true` eliminates most approval prompts and lets you work uninterrupted. Start with `false`, switch to `true` after a few sessions, and re-check the decision whenever the machine or the stakes change (a `/setup-audit` run will ask). | No |
 | `inputNeededNotifEnabled` / `agentPushNotifEnabled` | boolean | System notifications when Claude needs input or a background agent finishes. Useful once you run longer autonomous tasks. | No |
 | `voiceEnabled` | boolean | Enables voice input for speaking to Claude instead of typing. | No |
+| `extraKnownMarketplaces` | object | Registers third-party plugin marketplaces so their plugins become installable. See [Plugins](07-plugins-and-agents.md). | No |
+| `skipWorkflowUsageWarning` | boolean | Suppresses the warning shown before a multi-agent workflow run, which can spend a lot of tokens. Leave it off until you know what a run costs you. | No |
 
 Settings marked "Starter? Yes" are the only two you need when first setting up. Add others as you discover what you need.
 

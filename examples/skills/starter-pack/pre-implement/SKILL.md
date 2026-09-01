@@ -1,233 +1,103 @@
 ---
 name: pre-implement
-description: Planning workflow before implementing any non-trivial feature. Use when starting work on a new feature, bug fix, or significant code change. Forces research and design before coding, and includes a required pre-mortem step (imagine the shipped solution failed; surface risks, wrong assumptions, and failure modes while course corrections are still cheap).
+description: Planning workflow before implementing any non-trivial build — code, skills, doc pipelines, or audit/probe tools. Use when starting work on a new feature, bug fix, skill, or significant change. Forces research and design before building, and includes a required pre-mortem step (imagine the shipped solution failed; surface risks, wrong assumptions, and failure modes while course corrections are still cheap).
 ---
 
 # Pre-Implementation Planning
 
-This skill enforces a disciplined approach to implementation: **research first, design second, code third**.
+Research first, design second, build third. Applies to code, skills, doc pipelines, and audit tools alike — "production" below means wherever the thing runs for real (a repo, a teammate's machine, a shared doc someone else reads).
 
 ## When to Use
 
-Run `/pre-implement` before starting ANY task that:
-- Takes more than 30 minutes
-- Touches more than 2-3 files
-- Involves external services (APIs, databases, third-party libs)
-- Has unclear requirements
-- Could be implemented multiple ways
+Run `/pre-implement` before any task that takes more than ~30 minutes, touches more than 2-3 files, involves external services, has unclear requirements, or could be built more than one way.
 
-## Prerequisites Check
+**Skip for:** typo fixes, single-line changes, debugging probes, tasks explicitly defined with no ambiguity. When in doubt, run it.
 
-Before running this skill:
+## Step 0: Consume What Already Exists
 
-- **State/sync/real-time/Firebase involved?** Map the state up front: where each piece lives, what writes it, how other components learn it changed, and what happens when copies disagree. Do this before designing, not during implementation.
-- **Unfamiliar library/API?** Read the official docs first. Note update/merge semantics, rate limits, auth quirks, and documented gotchas before committing to an approach.
+Do not re-ask what's already decided.
 
-## The Pre-Implementation Checklist
+- **Grill record?** Check `brainstorms/` for a `/grill-me` record on this task. Its decisions are inputs, not open questions. Only surface a question if the record is silent or contradicts the repo.
+- **Prior plan?** If a `plans/` dir for this task exists from an earlier session, a plan is a point-in-time snapshot — **re-validate it against the current repo before executing** (files it names still exist, assumptions still hold, nothing shipped in between). Never execute a stale plan on trust.
 
-### Phase 1: Understand the Problem (The 7 Questions)
+## Prerequisites
 
-Before writing any code, answer these questions:
+- **State/sync/real-time involved?** Map the state up front: where each piece lives, what writes it, how other components learn it changed, what happens when copies disagree. Diagram it if complex — before designing, not during implementation.
+- **Unfamiliar library/API?** Read the official docs first. Note update/merge semantics, rate limits, auth quirks, documented gotchas.
+- **Building a checker, probe, linter, or audit step?** Read `~/.claude/references/control-testing.md` first. An unvalidated negative reads as proof; every check needs a positive control.
 
-1. **What exactly needs to happen?**
-   - [ ] Can you describe the feature in one sentence?
-   - [ ] What are the acceptance criteria?
-   - [ ] What edge cases exist?
+## Phase 1: Understand
 
-2. **What already exists?**
-   - [ ] Search codebase for related code
-   - [ ] Check if similar patterns exist
-   - [ ] Review relevant documentation
+1. **What exactly needs to happen?** One-sentence description, acceptance criteria, edge cases.
+2. **What already exists?** Search the codebase and the archive repos for related code and precedents. Similar patterns beat green-field designs.
+3. **What are the dependencies?** External services, libraries, documented gotchas.
+4. **What else does this touch?** Other components that interact with it; what happens when they fail or slow down.
 
-3. **What are the dependencies?**
-   - [ ] What external services are involved?
-   - [ ] What libraries/packages are needed?
-   - [ ] Are there documented gotchas? (READ THE DOCS)
+## Phase 2: Design
 
-4. **Systems Thinking: What else does this touch?**
-   - [ ] What other components interact with this?
-   - [ ] What happens when those components fail or slow down?
-   - [ ] Draw the system context if complex
-
-### Phase 2: Design the Solution
-
-5. **State Management (if applicable)**
-   - [ ] What state does this feature need?
-   - [ ] Where will it live? (local, context, database)
-   - [ ] What changes it?
-   - [ ] How do other components know when it changes?
-   - [ ] What happens if state gets out of sync?
-
-   **If state is complex, stop and diagram it now** (every location, writer, and listener) before continuing.
-
-6. **What's the approach?**
-   - [ ] Draw a state diagram if state management is involved
-   - [ ] List the files that need to change
-   - [ ] Write pseudocode for complex logic
-
-7. **Trade-off Analysis**
+5. **Approach + trade-offs.** If more than one viable approach, table them:
 
    | Approach | Pros | Cons | What You Give Up |
    |----------|------|------|------------------|
-   | Option A | ... | ... | ... |
-   | Option B | ... | ... | ... |
 
-   **Chosen approach:** [Option] because [trade-off is acceptable given context]
+   Name the chosen one and why the trade-off is acceptable.
+6. **Files to change.** List them. Pseudocode any complex logic.
+7. **Failure handling.** Bad input, external service down, partial completion.
+8. **Revert path.** How do we undo this if it's wrong? If it writes to someone else's system (Drive, Notion, Linear, a shared repo), the house rule applies: move-map + revert path before executing, verify by querying back.
+9. **What proves it works?** Define the checks before building. For a skill, that's a `test-cases.md` battery you run it against; for code, test cases including error and edge paths; for a pipeline, a known-answer run.
 
-8. **What could go wrong?**
-   - [ ] What happens if external service fails?
-   - [ ] What happens on bad input?
-   - [ ] What happens on network issues?
+## Phase 3: Pre-Mortem and Confirmation
 
-9. **Reversibility: How do we undo this?**
-   - [ ] If this breaks in production, how quickly can we roll back?
-   - [ ] Can we feature flag this?
-   - [ ] Is there a gradual rollout path?
-   - [ ] What's the escape hatch?
+10. **Pre-mortem (required).** Imagine it's 3 months out and this failed badly. Work backwards:
+    - Top 3-5 failure modes. Sweep: data integrity (runs twice, partial completion, races), external dependencies (slow, down, changed shape, expired credentials), scale, edge cases, security, operations (how would we even know it broke?).
+    - Every assumption the plan makes, and what happens if each is wrong. **Verify the risky ones empirically before building** — a 5-minute test against real data beats ship-and-watch.
+    - For each high-impact risk: a cheap course correction now (mitigation, monitoring signal, or rollback path).
+    - Verdict: safe to proceed / proceed with required mitigations / redesign.
 
-10. **What tests will prove it works?**
-    - [ ] Write test cases BEFORE implementing
-    - [ ] Include happy path and error cases
-    - [ ] Include edge cases identified in step 1
+    A solution that "feels too easy" is the strongest signal to slow down here.
 
-### Phase 3: Pre-Mortem and Validation
+11. **Review.** Aligns with existing patterns? Simplest thing that works? All phases answered?
+12. **Confirm.** Present the plan — including the pre-mortem verdict — to the user before building.
 
-11. **Pre-mortem (required)**
+## Output: Persist the Plan
 
-    Imagine it's 3 months from now and this feature failed badly in production. Work backwards from that incident:
-    - [ ] List the top 3-5 failure modes. Sweep the categories: data integrity (runs twice, partial completion, races), external dependencies (slow, down, unexpected responses, expired credentials), scale, edge cases, security, operations (how would we even know it broke?)
-    - [ ] List every assumption the plan makes and what happens if each is wrong. Verify the risky ones empirically before coding (a 5-minute test against real data beats ship-and-watch)
-    - [ ] For each high-impact risk, name a cheap course correction now: a mitigation, a monitoring signal, or a rollback path
-    - [ ] Verdict: safe to proceed / proceed with required mitigations / redesign, risks too high
+Write the plan to `plans/active/<task-name>/` in the project root. Two tiers:
 
-    This is required, not optional. A solution that "feels too easy" is the strongest signal to slow down here.
-
-12. **Review the plan**
-    - [ ] Does this align with existing patterns in the codebase?
-    - [ ] Is this the simplest solution that works?
-    - [ ] Are there any obvious issues?
-    - [ ] Did we answer all 7 self-check questions?
-
-13. **Get confirmation**
-    - [ ] Present the plan (including the pre-mortem verdict) to the user
-    - [ ] Confirm approach before coding
-
-## Output Format
-
-After running this checklist, **persist the plan to disk** and output it to the user.
-
-### File Structure
-
-Create a directory under `plans/active/{task-name}/` (in the project root) with three files:
-
-1. **`strategy.md`** — The plan itself. Updated rarely, only when approach fundamentally changes.
-2. **`findings.md`** — Research discoveries, gotchas, docs references. Updated during research phases.
-3. **`progress.md`** — What's done, what's next, blockers. Updated every interaction.
-
-This allows autonomous agents in loops to pick up where the previous iteration left off.
-
-### strategy.md template
+**Default — single `plan.md`** covering everything in one file:
 
 ```markdown
-## Pre-Implementation Plan: [Feature Name]
+# Plan: [Task Name]
 
-### Problem Statement
-[One sentence description]
+## Problem
+[One sentence. Grill record: brainstorms/... if one exists]
 
-### Existing Code Review
-- **Related files**: [list]
-- **Similar patterns**: [list]
-- **Dependencies**: [list]
+## Approach
+[Chosen approach + why; trade-off table if there was a real choice]
 
-### Proposed Approach
-[Description of the solution]
+## Files to Change
+| File | Change | Description |
+|------|--------|-------------|
 
-### Files to Change
-| File | Change Type | Description |
-|------|-------------|-------------|
-| path/to/file.ts | Modify | Add X function |
+## Pre-Mortem
+- Failure modes: ...
+- Risky assumptions + empirical checks run: ...
+- Verdict: [safe / proceed with mitigations / redesign]
 
-### Risk Assessment
-| Risk | Mitigation |
-|------|------------|
-| [What could fail] | [How to handle] |
+## Proof
+[Test cases / battery / known-answer run that shows it works]
 
-### Test Cases
-1. [Happy path test]
-2. [Error case test]
-3. [Edge case test]
-
-### Questions for User
-- [Any clarifications needed?]
+## Progress
+- [ ] ...   ← keep current; this is what a resumed session reads first
 ```
 
-### findings.md template
+**Escalate to three files** (`strategy.md` / `findings.md` / `progress.md`) only when the work will span multiple sessions or run in an autonomous loop — strategy changes rarely, findings accrete during research, progress updates every interaction. Same content, split by update cadence.
 
-```markdown
-## Findings: [Feature Name]
-
-### Research Notes
-- [What you learned from reading docs, code, etc.]
-
-### Gotchas
-- [Surprising behavior, edge cases discovered]
-
-### Relevant Code
-- [File paths and snippets that matter]
-```
-
-### progress.md template
-
-```markdown
-## Progress: [Feature Name]
-
-### Status: [NOT STARTED | IN PROGRESS | BLOCKED | DONE]
-
-### Completed
-- [ ] ...
-
-### Next Steps
-- [ ] ...
-
-### Blockers
-- (none)
-```
-
-When the task is complete, move the directory from `plans/active/` to `plans/completed/`.
-
-## Example Usage
-
-**User**: "Add a calling phase timer that auto-passes after 30 seconds"
-
-**Before `/pre-implement`** (what NOT to do):
-- Jump in and start coding the timer
-- Discover Firebase sync issues mid-implementation
-- Spend hours debugging
-- Revert everything
-
-**After `/pre-implement`** (correct approach):
-1. Research Firebase Realtime Database update semantics
-2. Discover that `update()` merges nested objects
-3. Design state management to handle this
-4. Write test for "when timer expires, pendingCalls should clear"
-5. THEN implement
+**When done, move the dir to `plans/completed/`.** Do the move in the same session the work finishes — a later session won't. Stragglers get caught at `/wrap-up` time or in a periodic sweep.
 
 ## Key Principle
 
 > "Weeks of coding can save you hours of planning."
 
-The time spent planning is always less than the time spent debugging a bad implementation.
-
 ## Next Step
 
-Begin implementing. The pre-mortem is built into Phase 3 above, so no separate risk pass is needed. Keep the identified failure modes in view while coding and reference them when adding error handling.
-
-## When to Skip
-
-You can skip this for:
-- Typo fixes
-- Single-line changes
-- Adding console.log for debugging
-- Tasks explicitly defined with no ambiguity
-
-When in doubt, run the checklist. It takes 10 minutes and saves hours.
+Begin implementing. The pre-mortem is built in above — keep the identified failure modes in view while building and reference them when adding error handling.

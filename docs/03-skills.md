@@ -2,6 +2,8 @@
 
 > **Revision note (July 2026).** A transcript audit of the live config found the code-project chain skills (/learn, /harden, /test-gaps, /docs-sync, /pre-ship, /debug, /fresh-eyes, /refactor, /pre-mortem) had zero to two uses in 90 days once the work shifted from code to knowledge/ops. They were archived with re-add triggers, and /pre-mortem was folded into /pre-implement as a required step. Two of them (/fresh-eyes, /learn) have since been deleted from the live config outright, having stayed untouched through a second audit; they remain shipped here, which is the point of archiving rather than deleting. The catalog below now leads with the knowledge/ops workflow the live config actually runs; the code chain remains shipped and documented under "Code-Project Chain" because the skills are sound for code-heavy work. The meta-lesson travels with them: prune skills against measured usage, and archive rather than delete so a trigger can bring them back.
 
+> **Revision note (September 2026).** `/pre-implement` was rewritten in the live config and re-synced here: it lost roughly half its length (three output files collapsed into one `plan.md`, escalating to three only for multi-session work) and gained a Step 0 that reads any existing `/grill-me` record before asking anything. `/walkthrough` is new to the catalog. The lesson from the rewrite: a planning skill that emits three files for every task gets skipped on small ones, so the default output should be the smallest thing that still carries the pre-mortem.
+
 ## What Are Skills?
 
 Skills are slash commands backed by `SKILL.md` prompt files. When you type `/skill-name` in a Claude Code conversation, Claude loads the corresponding `SKILL.md` file and follows its content as instructions.
@@ -112,7 +114,7 @@ The daily loop: `/grill-me` (if the idea is fuzzy) -> do the work -> `/checkpoin
 |-------|-------------|-------------|-------|
 | `/session-start` | Standardized session kickoff with health checks and context loading. | At the start of every session. | Beginner |
 | `/grill-me` | Relentless one-question-at-a-time interview that extracts decisions from your head, checkpointing every answer to a `brainstorms/` file. | When bringing a fuzzy idea or process that needs decisions extracted before planning. | Beginner |
-| `/pre-implement` | Pre-implementation planning with research, design trade-offs, and a required pre-mortem step. | Before any non-trivial feature or change. | Beginner |
+| `/pre-implement` | Pre-implementation planning with research, design trade-offs, and a required pre-mortem step. Consumes any existing `/grill-me` record first, and persists the plan to `plans/active/`. | Before any non-trivial build -- code, a skill, a doc pipeline, or an audit tool. | Beginner |
 | `/checkpoint` | High-fidelity session save: writes a HANDOVER.md breadcrumb (state, next step, open decisions) and commits. | Before compacting, stepping away, or nearing the context limit mid-task. | Beginner |
 | `/wrap-up` | End-of-session routine: session log, roadmap update, git check, learnings capture, handoff. | At the end of every session. | Beginner |
 | `/compound` | Extract learnings from the session (corrections, patterns, decisions, domain insights) into `learnings.md` and memory. | After meaningful work, or anytime something is worth remembering. | Beginner |
@@ -127,6 +129,7 @@ The daily loop: `/grill-me` (if the idea is fuzzy) -> do the work -> `/checkpoin
 |-------|-------------|-------------|-------|
 | `/plain` | Re-explain the current technical topic in plain English, anchored in the live example in the conversation. | When jargon piles up or layered concepts blur together. | Beginner |
 | `/show-me` | Build a visual (diagram, table, timeline, widget) to explain the current topic. Sibling of `/plain`: that one fixes the words, this one fixes the shape. | When an explanation involves 3+ interacting parts or a multi-step flow. | Beginner |
+| `/walkthrough` | Turn a manual task into dead-simple numbered instructions: one action per step, exact on-screen labels, and a verification step at the end. | When you have to do something by hand -- manual testing, UI config, account setup. | Beginner |
 | `/deck-review` | Review an investor pitch deck across positioning, narrative flow, consistency, and fundability. | Before sending a deck, or when giving deck feedback. | Advanced |
 | `/open` | Find and open a file by fuzzy name match, surfaced inside Claude Code rather than handed to another app. | When you know roughly what a file is called but not where it lives. | Beginner |
 | `/loose-ends` | Sweep the current conversation for unresolved items and rank them. Recall-only: no writes, no fixes. | Returning from a tangent, or before closing out a session. | Beginner |
@@ -210,4 +213,4 @@ Three skills here carry more than a `SKILL.md`, and the extra files have to be c
 
 **Stage 3: Better inputs** -- grill-me before building, fool before deciding, humanizer before sending.
 
-**Stage 4: Extend by domain** -- plain, show-me, deck-review, loose-ends, tighten, and the maintenance skills (setup-audit, tidy) as your setup grows. Add the code-project chain if your work is code-heavy.
+**Stage 4: Extend by domain** -- plain, show-me, walkthrough, deck-review, loose-ends, tighten, and the maintenance skills (setup-audit, tidy) as your setup grows. Add the code-project chain if your work is code-heavy.

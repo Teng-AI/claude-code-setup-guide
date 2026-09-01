@@ -19,7 +19,7 @@ Write a durable, high-fidelity breadcrumb so the next context window (after `/co
    - **Done** — completed work this session (bullets).
    - **In progress** — what's actively being worked on and where it stands.
    - **Open decisions** — anything unresolved the user still needs to weigh in on.
-   - **File → artifact map** — key files/folders touched and what each holds (include out-of-repo artifacts, e.g. `~/yt-notes/...`).
+   - **File → artifact map** — key files/folders touched and what each holds (include out-of-repo artifacts, e.g. a scratch or export dir outside the repo).
    - **Next step** — ONE concrete next action, not a list.
 3. **Get work onto disk** — anything important living only in the chat, write it to its proper file now.
 4. **Commit** (if in a repo) — stage and commit with `checkpoint: <short summary>`. Do NOT push; respect branch rules (the push-to-main hook blocks pushes anyway). Say so if there's nothing to commit.

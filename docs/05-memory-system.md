@@ -60,6 +60,9 @@ The fact. For feedback/project types, follow with **Why:** and
 **How to apply:** lines. Link related memories with [[their-name]].
 ```
 
+`[[their-name]]` resolves only among files in the *same* memory directory. To point at the
+vault, a repo's `learnings.md`, or another project's memory, write a plain backticked path.
+
 ## learnings.md: The Capture Layer
 
 Each project keeps a `learnings.md` in its root, appended to whenever you correct Claude, an assumption proves wrong, a library misbehaves, or a design decision has non-obvious rationale. Entries are typed (`correction`, `pattern`, `decision`, `domain`) and kept to 3-5 lines. See [Project Setup](06-project-setup.md) for the full format.
@@ -111,6 +114,7 @@ you wrote the system for.
 1. **Invisible memory.** A topic file with no index line is never recalled. Every file gets an index one-liner with the keywords you would actually search.
 2. **Stale facts.** Memory reflects when it was written. Verify remembered specifics (paths, flags, IDs) against reality before acting on them, and use absolute dates only.
 3. **Fat index.** Content pasted into MEMORY.md silently truncates at the load cap. The index holds greppable pointers; content belongs in topic files (moved verbatim, never summarized away).
+4. **Links that cross a layer boundary.** `[[wikilinks]]` resolve inside one memory directory, or inside the vault -- not between them. A `[[name]]` pointing at something in another layer promises a graph that does not exist and silently resolves to nothing, so nobody notices it broke. Link within a layer with `[[name]]`; point across layers with a plain backticked path.
 
 ## What Memory Is NOT
 

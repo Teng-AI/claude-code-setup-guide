@@ -22,6 +22,26 @@ Plugins are managed in your `settings.json` file under the `enabledPlugins` key:
 
 This file lives at `~/.claude/settings.json` for global configuration, or in `.claude/settings.json` at the project root for project-specific plugins.
 
+Plugins from outside the official catalog need their source registered first, under
+`extraKnownMarketplaces`. Each entry names a marketplace and where it lives:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "some-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "owner/repo"
+      }
+    }
+  }
+}
+```
+
+Registering a marketplace only makes its plugins installable -- it does not enable
+anything on its own. You still add the plugin to `enabledPlugins`. Treat adding a
+marketplace as a trust decision: its plugins run shell commands with your permissions.
+
 ### Managing Plugins
 
 **Install a plugin** by adding its name to the `enabledPlugins` array in `settings.json`.

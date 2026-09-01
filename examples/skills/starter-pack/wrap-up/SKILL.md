@@ -84,6 +84,27 @@ If the project has both a `ROADMAP-INFRA.md` (or similar active roadmap) and a `
 
 This keeps the roadmap clean (active items only) and the changelog as the historical record.
 
+**Status-line trackers (for roadmaps that carry `> status:` or `> ws-status:` lines):**
+If the repo's roadmap has entries with lines of the form
+`> status: STAGE · prio: P · waiting on: WHO · next: ...` (any tracked level; `ws-status`
+is a coarser workstream level and follows the same rules):
+1. **Reconcile first.** If the tracker block names a mirror (e.g. a Notion database link
+   in its header), fetch the mirror's rows BEFORE writing anything and diff them against
+   the repo lines. A field that differs where the repo line was NOT touched this session
+   is a mirror-side edit: adopt it into the repo line and note the adoption in the
+   session log. A field where BOTH sides changed is a true conflict: show both values
+   and ask, never silently pick. A mirror row with NO repo line is a new entry: adopt
+   it as a new repo line. A repo line whose mirror row was deleted is a removal
+   request: confirm before dropping the repo line (regenerating it unasked reverses a
+   human's delete). Page PROSE around the databases belongs to the mirror side: never
+   rewrite it during regeneration, and touch it only on an explicit ask, fetch-first.
+2. Update the line for every activity this session touched (stage, prio, waiting-on,
+   next; the allowed values are defined beside the lines in that roadmap).
+3. Regenerate the mirror's rows from the now-reconciled lines: one row per entry, field
+   for field, stamp today in the mirror's Updated field, and fetch the rows back to
+   verify. The repo stays the arbiter and the record; the mirror is where teammates and
+   you may edit between sessions.
+
 ### Step 5: Git Status Check
 
 ```bash

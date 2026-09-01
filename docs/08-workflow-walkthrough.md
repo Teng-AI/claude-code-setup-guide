@@ -46,14 +46,14 @@ Saved to: docs/learning-notes/notifications-api.md
 > How to undo? Feature flag. Disable flag, no data loss.
 
 Plan: NotificationService wrapper, notification_preferences table, /api/notifications/preferences endpoint, PreferencesPanel component, ENABLE_NOTIFICATIONS feature flag
-Saved to: strategy.md
+Saved to: plans/active/notifications/plan.md
 ```
 
 ---
 
 ## Step 4: Implement the Feature
 
-With the plan from Step 3, write the code. Claude follows the strategy document, references learning notes from Step 2 (respects rate limits, validates template variables), and builds the service, types, migration, API route, and UI component.
+With the plan from Step 3, write the code. Claude follows the plan, references learning notes from Step 2 (respects rate limits, validates template variables), and builds the service, types, migration, API route, and UI component.
 
 ---
 
