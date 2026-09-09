@@ -102,7 +102,7 @@ CLAUDE.md shape for a new or retrofitted repo: `~/.claude/references/claude-md-t
 `learnings.md` format: `~/.claude/references/learnings-format.md` (lazy-loaded; `/compound` and `/wrap-up` read it)
 New project setup: `~/.claude/references/project-setup-checklist.md` (lazy-loaded; `/init` reads it)
 Notion work: read `~/.claude/references/notion-api.md` first — direct API calls for block types, file uploads, views (lazy-loaded, not @-imported)
-Co-Work skill building: read `~/.claude/references/cowork-skill-design.md` first — token budgets, context management, skill sizing (lazy-loaded, not @-imported)
+Co-Work skill building: read `~/.claude/references/cowork-skill-design.md` first — loading model, structure template, scripts-vs-prose, evals, delivery discipline (lazy-loaded, not @-imported)
 Memory system questions (what goes in which layer, consolidation): read `~/.claude/references/memory-system.md` (lazy-loaded, not @-imported)
 A check came back empty, or you are building a probe/linter/audit step: read `~/.claude/references/control-testing.md` first — nine cases where an unvalidated negative read as proof (lazy-loaded, not @-imported)
 Driving a browser: read `~/.claude/references/browser-control.md` **before picking a surface** — the Chrome extension only bridges from Google Chrome and needs the extension and the site session in the same browser profile, so it often cannot connect; Playwright is the default for logins/uploads/multi-step flows (lazy-loaded, not @-imported)
