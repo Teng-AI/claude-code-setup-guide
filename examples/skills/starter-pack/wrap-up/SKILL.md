@@ -117,6 +117,8 @@ git status
 3. If yes, create commit with session summary
 4. If no, note that changes are intentionally uncommitted
 
+**Version check (repos with a human-facing version and a CHANGELOG.md, e.g. a `version` in package.json):** ask "did this session ship something a player or user would notice?" If yes, make sure each such change has a line under `[Unreleased]` in CHANGELOG.md, in user words. If the work is a release (a feature, a rule, a fix users should look for by name), cut it now the way the repo's README says: rename the section, bump the version in its own `chore(release)` commit, tag `vX.Y.Z` annotated, and push the tag with the branch in Step 12. Never bump for a change nobody would notice.
+
 This step covers the SESSION'S work product only. Do not push here — wrap-up artifacts (learnings, HANDOVER, session log) don't exist yet. Step 12 commits those and pushes everything, always last.
 
 ### Step 6: Extract Learnings (`/compound`)

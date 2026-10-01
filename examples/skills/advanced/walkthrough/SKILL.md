@@ -35,6 +35,7 @@ Rules for the steps themselves:
 - **Exact labels, bolded**, as they appear on screen — never "go to the settings area".
 - Add a `→ You should see:` line after any step where the screen changes or the user could be lost. Not after every step.
 - Commands go in their own `bash` fenced block, one per block, copy-paste ready — no placeholders unless unavoidable, and flag any placeholder loudly.
+- Anything the user types into a chat, a prompt box, or a form (a prompt for an AI, an answer to an intake question, a search string) goes in its own fenced block too, verbatim, followed by a `→ You should see:` line with the expected reply. Never refer to it ("the prompt from the card", "the usual message"); paste it. If no text is needed beyond starting a skill, say so in one line ("just invoke the skill").
 - No explanations inside the numbered list. If the why matters, one line above the list, not woven between steps.
 
 ## Gotchas

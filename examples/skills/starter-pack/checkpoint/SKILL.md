@@ -8,7 +8,7 @@ description: Save a high-fidelity session checkpoint before compacting or steppi
 Write a durable, high-fidelity breadcrumb so the next context window (after `/compact`, `/clear`, or `/resume`) picks up exactly where this one left off. This is the **manual, high-quality** save; the `PreCompact` hook (`~/.claude/hooks/pre-compact.sh`) is the **automatic fallback** that writes the same `HANDOVER.md` via Haiku when you don't run this. The `SessionStart` hook reads `HANDOVER.md` back on the next compact/resume.
 
 ## When to run
-- Nearing the context limit mid-task (don't wait for auto-compact to fire at ~80%).
+- Mid-task once the session passes about 200k tokens with real work left. Auto-compact on a 1M-window model waits until close to 1M, so it never fires in practice; compacting is a manual call.
 - At a natural boundary before `/compact` or `/clear`.
 - Before stepping away from a long session.
 
@@ -23,7 +23,7 @@ Write a durable, high-fidelity breadcrumb so the next context window (after `/co
    - **Next step** — ONE concrete next action, not a list.
 3. **Get work onto disk** — anything important living only in the chat, write it to its proper file now.
 4. **Commit** (if in a repo) — stage and commit with `checkpoint: <short summary>`. Do NOT push; respect branch rules (the push-to-main hook blocks pushes anyway). Say so if there's nothing to commit.
-5. **Tell the user it's safe to `/compact`** (or `/clear`), and that `SessionStart` will auto-surface `HANDOVER.md` on the next continuation.
+5. **End by naming the next command: `/compact`.** Give it as a copy-ready line with focus instructions drawn from the handover, e.g. `/compact keep the next step, open decisions, and file map from HANDOVER.md`. Claude cannot run `/compact` itself (built-in command, not a skill), so the user types it. Do not suggest `/clear`; clear only after `/wrap-up`. `SessionStart` will auto-surface `HANDOVER.md` on the next continuation.
 
 ## Notes
 - Distill, don't dump. The value is the precise **next step** + **open decisions**, not a transcript.

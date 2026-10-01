@@ -93,7 +93,7 @@ If scope is global, BOTH steps are required — a file without an index line is 
 1. Write a topic file to `~/.claude/projects/<your-home-project>/memory/learning_<slug>.md`
    - `<slug>` = kebab-case of the learning title
    - Frontmatter: `name`, `description`, `type: reference`, `source_project`, `source_date`
-2. Add a one-line entry to that MEMORY.md under the matching subsection of "Learnings by domain" (Verification discipline, Notion, Sheets, and so on; add a subsection only if none fits) — in the same tool-use turn as step 1, never deferred
+2. Add a one-line entry to that MEMORY.md under the matching subsection of "Learnings by domain" (Verification discipline, Notion, Sheets, and so on; add a subsection only if none fits) — in the same tool-use turn as step 1, never deferred. Format: append `; learning_<slug>.md (tag of 8 words or fewer)` to the END of that subsection's semicolon-joined block. Never a `- [Title](file.md) — hook` bullet: those bullets can push the index past its 25KB read cap.
 3. Verify before finishing: `grep <slug> MEMORY.md` returns the new line. If not, the bridge is incomplete; fix it before reporting the learning as captured.
 
 **Example global topic file:**

@@ -4,6 +4,8 @@
 
 > **Revision note (September 2026).** `/pre-implement` was rewritten in the live config and re-synced here: it lost roughly half its length (three output files collapsed into one `plan.md`, escalating to three only for multi-session work) and gained a Step 0 that reads any existing `/grill-me` record before asking anything. `/walkthrough` is new to the catalog. The lesson from the rewrite: a planning skill that emits three files for every task gets skipped on small ones, so the default output should be the smallest thing that still carries the pre-mortem.
 
+> **Revision note (October 2026).** Four shipped skills were re-synced from the live config. `/checkpoint` now triggers on a token budget (about 200k with work left) instead of "near the limit": on a 1M-window model auto-compact waits until close to 1M and never fires in practice, so compacting is a manual call and the skill ends by handing you the exact `/compact` line to type. `/compound` now spells out the MEMORY.md index-line format (append to the subsection's semicolon-joined block, never a bullet per learning) after bullets pushed a live index past the 25KB read cap. `/wrap-up` gained a version check for repos with a CHANGELOG.md, and `/walkthrough` now pastes any text the user has to type verbatim. The lesson: a skill that says "when you are close to the limit" assumes a limit that fires, and skills that write to an index need to name the format or the index outgrows its reader.
+
 ## What Are Skills?
 
 Skills are slash commands backed by `SKILL.md` prompt files. When you type `/skill-name` in a Claude Code conversation, Claude loads the corresponding `SKILL.md` file and follows its content as instructions.
