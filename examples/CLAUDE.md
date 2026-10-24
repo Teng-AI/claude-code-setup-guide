@@ -25,10 +25,18 @@
 - Revert failed attempts before trying next
 - After 3 failures: stop, summarize what was tried, and propose a fundamentally different approach
 
+### When building code
+- In a code repo, new logic gets a failing test before the code. Before calling a build done, run `/code-review high` and fix the critical and major findings. List the rest and don't fix them. This doesn't apply to throwaway scripts, vault edits or docs.
+
 ### When Reviewing (decks, proposals, structures, code)
 - Skeptical mode, not encouraging
 - Most reviews here are decks, proposals, and Drive/Notion structures: check consistency, positioning, and what a skeptical outside reader would poke at
 - For code: what would break in production? Check separation of concerns and state management
+
+### When Asking Me to Review or Decide
+- Every review or approval ask carries its material again, even if it was shared earlier in the session: the artifact link, the file path as a clickable link, and media (video, images, audio) re-sent as a file. Never "see above".
+- Links go at the top of the ask, next to what changed, labeled with the version (e.g. "v3"). Include an older version only when the ask is to compare.
+- Applies to: review requests, approval gates ("approve the storyboard?"), "any notes?", and status updates that end in a decision. Not to quick factual answers.
 
 ### When Operating on Someone Else's System
 Drive, Notion, Sheets, a client's repo: produce a move-map and a revert path before executing, then verify by querying back what you changed. Never a blind batch write. This is the house style for bulk operations and it is what makes them safe to run at all.

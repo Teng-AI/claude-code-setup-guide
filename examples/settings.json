@@ -16,6 +16,16 @@
             "statusMessage": "Checking repo visibility change"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I ~/.claude/hooks/mini-memory-guard.py",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -60,6 +70,11 @@
             "type": "command",
             "command": "~/.claude/hooks/audit-reminder.sh",
             "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "python3 -I ~/.claude/hooks/session-pull.py",
+            "timeout": 30
           }
         ]
       }
