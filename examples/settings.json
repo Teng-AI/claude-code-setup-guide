@@ -13,7 +13,8 @@
             "type": "command",
             "command": "~/.claude/hooks/repo-visibility-guard.py",
             "timeout": 20,
-            "statusMessage": "Checking repo visibility change"
+            "statusMessage": "Checking repo visibility change",
+            "onFailure": "block"
           }
         ]
       },
@@ -23,7 +24,8 @@
           {
             "type": "command",
             "command": "python3 -I ~/.claude/hooks/mini-memory-guard.py",
-            "timeout": 10
+            "timeout": 10,
+            "onFailure": "block"
           }
         ]
       }
