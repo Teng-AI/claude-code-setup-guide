@@ -4,7 +4,7 @@
 
 **Who:** [YOUR ROLE]. Growth areas: [YOUR GROWTH AREAS].
 
-**Workflow:** `/grill-me` (if fuzzy) → do the work → `/checkpoint` as you go → `/wrap-up`. For anything non-trivial to build, run `/pre-implement` before building; it carries the pre-mortem and the state-mapping and read-the-docs prerequisites, so those have no separate skill. The code-project chain is archived, with per-skill re-add triggers in `~/.claude/skills/_archive/README.md`.
+**Workflow:** `/grill-me` (if fuzzy) → do the work → `/checkpoint` as you go → `/wrap-up`. For anything non-trivial to build, run `/pre-implement` before building; it carries the pre-mortem and the state-mapping and read-the-docs prerequisites, so those have no separate skill. Big decisions: `/fool` to attack one; `/duel` for a blind Claude vs Codex check when Claude helped shape it. The code-project chain is archived, with per-skill re-add triggers in `~/.claude/skills/_archive/README.md`.
 
 **Dates:** Always check today's date from the system environment before writing dates. Don't assume the year.
 
