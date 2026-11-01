@@ -1,6 +1,6 @@
 # Hooks
 
-> **Revision note (November 2026).** The shipped-hooks table gained `session-pull.py`, a `SessionStart` hook that has been in `examples/` since late October without a description here. It exists because the live config now runs on two machines with git as the only sync, and a session that starts on stale files edits stale files. The lesson: when a hook lands in the example config, its row in this table has to land in the same change, or the table quietly stops being the list of what `--full` installs.
+> **Revision note (November 2026).** The shipped-hooks table gained `session-pull.py`, a `SessionStart` hook that has been in `examples/` since late October without a description here. It exists because the live config now runs on two machines with git as the only sync, and a session that starts on stale files edits stale files. The lesson: when a hook lands in the example config, its row in this table has to land in the same change, or the table quietly stops being the list of what `--full` installs. Two later changes in the same month: `audit-reminder.sh` lost its overdue-audit nag, which fired in 414 sessions over 90 days and led to one audit, and kept only its archive sweep; and the two script guards gained `onFailure: "block"` so a crash fails closed (see Exit Codes). The nag is the warn-only lesson from July over again: measure conversion before keeping a reminder.
 
 > **Revision note (July 2026).** The live config this guide mirrors was audited against 90 days of real transcripts. Five of the warn-only reminder hooks below (commit reminder, deploy reminder, error-string suggestion, and two of the prompt-keyword nudges) fired for months with near-zero conversion: the reminders were read and ignored. They were removed from the live config and survive here as construction examples. The lesson travels with them: warn-only hooks need periodic effectiveness checks (message fired vs. suggestion followed), or they decay into noise the user learns to skip. Blocking hooks (force-push guard) and acting hooks (prose check, pre-compaction save) all survived the same audit.
 
@@ -99,6 +99,8 @@ Full schemas: [hooks reference](https://code.claude.com/docs/en/hooks.md).
 
 Any output your hook prints to stdout is shown to Claude as feedback.
 
+A hook that crashes or times out lets the call through by default. For a guard hook, that is the wrong way to fail. Set `"onFailure": "block"` on the hook entry (Claude Code 2.1.295 and later) and a crash or timeout blocks the call instead. The two script guards in `examples/` carry it. It does not help an inline guard whose `jq` fails quietly: the command ends up empty, the hook exits 0, and Claude Code sees a pass, not a failure.
+
 ## Global vs Project-Level Hooks
 
 **Global hooks** (`~/.claude/settings.json`) fire on every project. Use these for universal rules that always apply: blocking force pushes, reminding about docs before commits, detecting errors, surfacing workflow suggestions.
@@ -143,7 +145,9 @@ What each absent script does in the config this guide mirrors, if you want to wr
 - **`pre-compact.sh`** — archives the transcript and writes a HANDOVER.md summary before
   compaction, unless a manual `/checkpoint` is already fresh.
 - **`session-start.sh`** — surfaces a recent HANDOVER.md after a compact or resume.
-- **`audit-reminder.sh`** — nudges when `/setup-audit` last ran more than a month ago.
+- **`audit-reminder.sh`**: once a day on a fresh start, deletes compaction archives older
+  than 30 days across every project, so a project that has gone quiet stops piling them up. It
+  used to also nag when `/setup-audit` was overdue; that part was removed (see the revision note).
 - **`session-pull.py`** — fast-forwards the session's project repo, plus the repos every session
   writes (a notes vault, `~/.claude`), from origin on startup, resume and clear. It skips
   compact so files never move mid-task, and it only fast-forwards: no merge, rebase, stash or

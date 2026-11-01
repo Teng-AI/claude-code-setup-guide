@@ -488,6 +488,18 @@ What this step owns is the part `/doctor` does not do: read the [Claude Code cha
 
 **When the version moved since the last audit, re-read the `/doctor` rows** in the Accepted Exceptions Ledger and in the division of labor below. `/doctor` ships inside the binary, so its check numbering, skip conditions, and destinations can change with any release, and no local check can detect that. The changelog read is the only moment this setup would notice.
 
+## Proposal Bar
+
+**The default is no change.** A setup that works should not be churned month to month. Report everything the checks find, but propose only what clears this bar:
+
+- **An action needs a reason it is costing something now:** security, something broken, or a Stats row past its threshold. "Could be cleaner", a best practice from an article, or a tidier structure goes to **Parked**, not Adopt or Improve.
+- **No restructures** (moving content between layers, renaming or merging skills, splitting CLAUDE.md) unless something is broken.
+- **Adopt holds at most one item**, and only with evidence it fixes a problem seen in this setup.
+- **At most three High + Medium actions.** If more clear the bar, keep the three with the largest measured cost and park the rest.
+- **A month with nothing over the bar is "Overall: Clean"** with no proposals. That is the expected result, not a failed audit.
+
+Critical findings are exempt: all of them get listed.
+
 ## Output Format
 
 Produce a report with two cuts: **buckets** (sam-illingworth's taxonomy) and **priority** (Critical / High / Medium).
