@@ -60,12 +60,14 @@ Never batch multiple answers into one write. The point is surviving context loss
 ## Finish
 
 1. Re-read the capture file. Reconcile contradictions and duplicate flags.
-2. Give a short recap: key decisions, what's still open, and the single best next step.
-3. Route the next step:
+2. **Ledger writes.** Turn each Key decision into its home before the recap: a status or scope edit on the project page, a task line in your tracker, or a decisions-log entry for a standing rule. Show the exact lines, wait for a yes, write them, link them from the capture file. A decision that stays only in the brainstorm is lost within a week.
+3. Give a short recap: key decisions, what's still open, and the single best next step.
+4. Route the next step:
    - Building a feature from this? → `/pre-implement` (feed it the brainstorm file)
    - This is a strategy or business bet? → `/fool` to attack it now that it's articulated
+   - That bet is also costly to reverse and Claude helped shape it? → offer `/duel` as well. This capture file becomes the duel's `owner.md`, shown to the analysts last and never put in the packet
    - Documenting a process/SOP? → the brainstorm file is the raw material; offer to draft the doc
-4. **Do not start implementing until the user confirms shared understanding.**
+5. **Do not start implementing until the user confirms shared understanding.**
 
 ## Gotchas
 

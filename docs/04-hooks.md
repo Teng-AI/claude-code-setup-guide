@@ -1,5 +1,7 @@
 # Hooks
 
+> **Revision note (November 2026).** The shipped-hooks table gained `session-pull.py`, a `SessionStart` hook that has been in `examples/` since late October without a description here. It exists because the live config now runs on two machines with git as the only sync, and a session that starts on stale files edits stale files. The lesson: when a hook lands in the example config, its row in this table has to land in the same change, or the table quietly stops being the list of what `--full` installs.
+
 > **Revision note (July 2026).** The live config this guide mirrors was audited against 90 days of real transcripts. Five of the warn-only reminder hooks below (commit reminder, deploy reminder, error-string suggestion, and two of the prompt-keyword nudges) fired for months with near-zero conversion: the reminders were read and ignored. They were removed from the live config and survive here as construction examples. The lesson travels with them: warn-only hooks need periodic effectiveness checks (message fired vs. suggestion followed), or they decay into noise the user learns to skip. Blocking hooks (force-push guard) and acting hooks (prose check, pre-compaction save) all survived the same audit.
 
 ## What Are Hooks?
@@ -122,6 +124,7 @@ and **this repo does not ship those scripts**:
 | `PreCompact` | `~/.claude/hooks/pre-compact.sh` | No |
 | `SessionStart` | `~/.claude/hooks/session-start.sh` | No |
 | `SessionStart` | `~/.claude/hooks/audit-reminder.sh` | No |
+| `SessionStart` | `python3 -I ~/.claude/hooks/session-pull.py` | No |
 
 A hook whose command is a path to a file that does not exist fails on every fire. After
 `--full`, either write the scripts or delete the entries you have no script for. The inline
@@ -141,6 +144,11 @@ What each absent script does in the config this guide mirrors, if you want to wr
   compaction, unless a manual `/checkpoint` is already fresh.
 - **`session-start.sh`** — surfaces a recent HANDOVER.md after a compact or resume.
 - **`audit-reminder.sh`** — nudges when `/setup-audit` last ran more than a month ago.
+- **`session-pull.py`** — fast-forwards the session's project repo, plus the repos every session
+  writes (a notes vault, `~/.claude`), from origin on startup, resume and clear. It skips
+  compact so files never move mid-task, and it only fast-forwards: no merge, rebase, stash or
+  push, so the worst case is a one-line warning and an untouched tree. Worth having once git is
+  the sync between two machines.
 
 **The general lesson:** a hook that names a path is a dependency. Ship the script with the
 config or the config is broken on arrival — this repo documented seven hooks with the wrong

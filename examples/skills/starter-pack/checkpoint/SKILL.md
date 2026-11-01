@@ -20,6 +20,7 @@ Write a durable, high-fidelity breadcrumb so the next context window (after `/co
    - **In progress** — what's actively being worked on and where it stands.
    - **Open decisions** — anything unresolved the user still needs to weigh in on.
    - **File → artifact map** — key files/folders touched and what each holds (include out-of-repo artifacts, e.g. a scratch or export dir outside the repo).
+   - **Environment deltas** — required when the session merged a branch, added or bumped a dependency, or worked in a git worktree; omit otherwise. A merge brings code, not environment: name the installs the receiving checkout still needs (lockfile changes → `npm ci`), generated files that are stale there (an iOS sync, codegen), which checkout last pushed a dev deployment, and gitignored files that exist only in a worktree (copy or delete them before it goes). Check with `git diff <base>..HEAD --stat -- package.json package-lock.json` and `git -C <worktree> status --short --ignored`.
    - **Next step** — ONE concrete next action, not a list.
 3. **Get work onto disk** — anything important living only in the chat, write it to its proper file now.
 4. **Commit** (if in a repo) — stage and commit with `checkpoint: <short summary>`. Do NOT push; respect branch rules (the push-to-main hook blocks pushes anyway). Say so if there's nothing to commit.

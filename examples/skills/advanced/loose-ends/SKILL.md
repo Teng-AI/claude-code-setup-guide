@@ -1,11 +1,11 @@
 ---
 name: loose-ends
-description: Sweep the current conversation for unresolved items and list them ranked. Use when the user says "loose ends", "/loose-ends", "what's outstanding", "what did we leave open", "anything unresolved", "what am I forgetting", "did we drop anything", "what suggestions did you make that I didn't answer", or returns from a tangent asking where things stand. Not for cross-session state (that's HANDOVER.md / session-start) and not for reviewing a task tracker.
+description: Sweep the current conversation for unresolved items and list them ranked; with "ask" (`/loose-ends ask`), put each open decision to the user as a quick multiple-choice question instead. Use when the user says "loose ends", "/loose-ends", "what's outstanding", "what did we leave open", "anything unresolved", "what am I forgetting", "did we drop anything", "what suggestions did you make that I didn't answer", or returns from a tangent asking where things stand. Ask mode when they say "/loose-ends ask", "interview me on the open items", "ask me about what's open", "quick-fire the decisions", "just ask me". Lighter than /grill-me (no capture file, no follow-up branches). Not for cross-session state (that's HANDOVER.md / session-start) and not for bets or the idea inbox (that's /ideas-triage).
 ---
 
 # Loose Ends
 
-List what's still open in THIS conversation so nothing gets forgotten after a tangent. Recall-only: no file writes, no task creation, no fixes — just the list.
+List what's still open in THIS conversation so nothing gets forgotten after a tangent. Recall-only: no file writes, no task creation, no fixes — just the list. Ask mode (below) is the one exception: it turns the list into questions and acts on the answers.
 
 ## Steps
 
@@ -28,9 +28,19 @@ Numbered list, most important first. One line of context each plus what resolvin
 ...
 ~~Struck items~~ — resolved or tracked, with where (one line, only if useful).
 
+## Ask Mode
+
+Triggered by `ask` as the argument or by the ask-mode phrases in the description. Run Steps 1 to 5 as usual, then ask instead of listing.
+
+1. Keep only items the user has to decide or approve. A "tracked" item from Step 4 stays in if it is still waiting on the user's decision (a report that lists the decision is not the decision). Look up facts yourself instead of asking. Items Claude can just do without a decision get one line after the questions; don't ask about them.
+2. Ask with AskUserQuestion: one question per item, up to 4 per call, at most 2 calls (8 items). Past 8, ask the top 8 and list the rest.
+3. Each question names the item and what the answer changes. Options: the recommended answer first, marked "(Recommended)", then one or two real alternatives, and "Later", which leaves it open. Put the material behind the item (file link, artifact link, the diff) in the question text or an option preview, since the user may not remember it.
+4. No follow-up questions. If an answer opens a new decision, list it as a new loose end rather than asking it.
+5. After the answers, give a short table: item, answer, what happens next. Then do what was approved, under the same rules as any other request (approving one settings change covers that change only). Items answered "Later" stay open; say so in one line.
+
 ## Gotchas
 
 - Don't list items the user already resolved with a terse reply ("done", "n/a", "skip") — terse answers count as decisions.
 - Don't pad the list to look thorough. Two real items beat six stale ones; an empty list is a valid answer.
 - Don't include long-horizon dated items that are already tracked elsewhere (calendar, ROADMAP, scheduled task) — those aren't loose, they're parked. Mention them only if the date is within ~2 weeks.
-- Don't turn the sweep into action. Resolving items is a follow-up the user asks for, not part of this skill.
+- Don't turn the sweep into action. Resolving items is a follow-up the user asks for, not part of this skill. Ask mode is that request: act only on what the answers approved.

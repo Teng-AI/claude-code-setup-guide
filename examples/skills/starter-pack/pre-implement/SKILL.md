@@ -40,6 +40,8 @@ Do not re-ask what's already decided.
    | Approach | Pros | Cons | What You Give Up |
    |----------|------|------|------------------|
 
+   Two approaches close and hard to reverse (data model, vendor, platform)? Offer `/duel` on the choice before naming one.
+
    Name the chosen one and why the trade-off is acceptable.
 6. **Files to change.** List them. Pseudocode any complex logic.
 7. **Failure handling.** Bad input, external service down, partial completion.

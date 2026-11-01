@@ -126,6 +126,8 @@ Produce a strengthened position that incorporates the valid challenges:
 [Did this exercise make you more or less confident? Why?]
 ```
 
+**Then the ledger writes, before the recap.** A verdict that changes a decision gets written to where that decision lives: the project or bet page (status, scope, kill criteria, a log line), new work as task lines in your tracker, a standing rule in your decisions log. Show the exact lines, wait for a yes, write them, link them from the verdict.
+
 ## Interaction Rules
 
 **Be direct, not cruel.** The goal is to improve the decision, not to prove the person wrong. But don't soften valid challenges — a gentle Fool is a useless Fool.
@@ -142,6 +144,8 @@ Produce a strengthened position that incorporates the valid challenges:
 |------------|-----|
 | `/pre-implement` | Run Fool on the approach *before* planning the implementation details. Its built-in pre-mortem step then challenges the implementation; Fool challenges the thinking. Do both before high-stakes launches. |
 | `/compound` | Capture what The Fool surfaced as a learning if it changed the decision. |
+| `/duel` (out) | After a verdict on a high-stakes, costly-to-reverse decision whose surviving challenges are judgment calls, not facts: offer a blind cross-model duel. Hand over the question and options only, never these challenges, or they anchor both analysts. |
+| `/duel` (in) | A duel that ends in CONSENSUS offers the Evidence Audit lens on the agreed points: search the repo, `brainstorms/`, `plans/` and your notes vault for anything the duel's packet left out that contradicts them. |
 
 ## When to Skip
 

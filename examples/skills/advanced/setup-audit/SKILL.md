@@ -46,12 +46,15 @@ date +%Y-%m-%d > ~/.claude/.last-setup-audit
 The #1 token hog. Cem Karaca's writeup documents a CLAUDE.md that grew to 1,207 lines / ~42,000 tokens, eating 40% of context before any work started.
 
 ```bash
-# Line counts for every CLAUDE.md loaded this session
-find ~/.claude -name "CLAUDE.md" 2>/dev/null | xargs wc -l 2>/dev/null
-find . -name "CLAUDE.md" -not -path "*/node_modules/*" -not -path "*/.git/*" 2>/dev/null | xargs wc -l 2>/dev/null
+# Line counts for every CLAUDE.md loaded this session.
+# Skip copies that never load: worktrees (another session's checkout), _archive/, and any
+# published examples/ folder (a public copy of your global file reads as a project file).
+SKIP=(-not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/worktrees/*" -not -path "*/_archive/*" -not -path "*/examples/*")
+find ~/.claude -name "CLAUDE.md" "${SKIP[@]}" 2>/dev/null | xargs wc -l 2>/dev/null
+find . -name "CLAUDE.md" "${SKIP[@]}" 2>/dev/null | xargs wc -l 2>/dev/null
 
 # Rough token estimate (1 token ≈ 4 chars)
-find ~/.claude -name "CLAUDE.md" -exec wc -c {} \; 2>/dev/null | awk '{printf "~%d tokens: %s\n", $1/4, $2}'
+find ~/.claude -name "CLAUDE.md" "${SKIP[@]}" -exec wc -c {} \; 2>/dev/null | awk '{printf "~%d tokens: %s\n", $1/4, $2}'
 ```
 
 **Thresholds:**
@@ -234,15 +237,28 @@ done
 
 Flag user-scope servers that only one project actually uses (move to that project's `.mcp.json`) and project-scope servers duplicated across several repos (promote to user scope). Still prune anything unused in the last 30 days.
 
+**Count calls, not mentions.** Every session transcript lists every connected server's tool names in its deferred-tool block, so a plain grep for `mcp__<server>__` matches about every session and proves nothing. Count sessions that actually called a tool:
+
+```bash
+for s in $(jq -r '.mcpServers // {} | keys[]' ~/.claude.json); do
+  n=$(find ~/.claude/projects -name "*.jsonl" -mtime -90 -size +1k -print0 2>/dev/null | \
+    xargs -0 grep -l "\"type\":\"tool_use\",\"id\":\"[^\"]*\",\"name\":\"mcp__${s}__" 2>/dev/null | wc -l | tr -d ' ')
+  echo "$n  $s"
+done | sort -rn
+```
+
+Add project-scope server names (from each `.mcp.json` and `.projects[].mcpServers` in `~/.claude.json`) to the loop. Before trusting a zero, control-test the pattern with a tool you know ran: swap in `Bash` for `mcp__${s}__` against the current session's transcript and confirm it counts. The full sweep takes a few minutes, so run it in the background.
+
 ## Step 6: Skill Inventory + Staleness
 
 ```bash
-# Count skills
-echo "User skills: $(ls ~/.claude/skills/ 2>/dev/null | wc -l)"
+# Count skills. Two folders in ~/.claude/skills are not skills: _archive/ (retired skills)
+# and synced/ (the desktop app's copy of claude.ai skills, which load as anthropic-skills:<name>).
+echo "User skills: $(ls ~/.claude/skills/ 2>/dev/null | grep -vxE '_archive|synced' | wc -l)"
 echo "Project skills: $(ls .claude/skills/ 2>/dev/null | wc -l)"
 
 # Skills not touched in 90 days
-find ~/.claude/skills -name "SKILL.md" -mtime +90 2>/dev/null
+find ~/.claude/skills -name "SKILL.md" -mtime +90 -not -path "*/_archive/*" -not -path "*/synced/*" 2>/dev/null
 find .claude/skills -name "SKILL.md" -mtime +90 2>/dev/null
 ```
 
@@ -312,11 +328,12 @@ done | sort -rn -k2
 # stubs whose content moved to brain/topics/ or a reference, and says not to re-index them.
 # Without this exclusion the check reported all 21 stubs as orphans, and that false finding
 # survived three audits (5 "orphans" on 07-11, 22 on 07-25) before anyone opened the files.
+# Stubs that open with "# Stub — absorbed <date>" match none of the phrases, hence ^# Stub.
 for d in ~/.claude/projects/*/memory; do
   [ -f "$d/MEMORY.md" ] || continue
   ( cd "$d" && for f in *.md; do [ "$f" = MEMORY.md ] && continue
       grep -q "$f" MEMORY.md && continue
-      grep -qiE "moved to|absorbed into|redirect stub|→ *promoted to" "$f" && continue
+      grep -qiE "^# Stub|moved to|absorbed into|redirect stub|→ *promoted to" "$f" && continue
       echo "ORPHAN $(basename $(dirname $PWD)): $f"; done )
 done
 
