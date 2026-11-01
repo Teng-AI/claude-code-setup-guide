@@ -1,6 +1,6 @@
 ---
 name: duel
-description: Blind cross-model check on a high-stakes decision. A fresh Claude analyst and Codex each answer from the same facts-only packet without seeing each other or the owner's position, swap once, then see the owner's position last. Use when the user says "duel this", "/duel", "debate this with Codex", "have Claude and Codex debate", "second opinion from another model", "have Codex weigh in", "get a cross-model check", or when /grill-me, /fool or /ideas-triage offers it before a costly-to-reverse decision Claude helped shape (pricing, business model, a new bet, a vendor or data-model choice). Not for reviewing a code diff or memo (one codex read does that), not for poking holes in a position (that's /fool), not for taste or dialect calls.
+description: Blind cross-model check on a high-stakes decision. A fresh Claude analyst and Codex each answer from the same facts-only packet without seeing each other or the owner's position, swap once, then see the owner's position last. Use when the user says "duel this", "/duel", "debate this with Codex", "have Claude and Codex debate", "second opinion from another model", "have Codex weigh in", "get a cross-model check", or when /grill-me, /fool or /pre-implement offers it before a costly-to-reverse decision Claude helped shape (pricing, business model, a new bet, a vendor or data-model choice). Not for reviewing a code diff or memo (one codex read does that), not for poking holes in a position (that's /fool), not for taste or dialect calls.
 ---
 
 # Duel

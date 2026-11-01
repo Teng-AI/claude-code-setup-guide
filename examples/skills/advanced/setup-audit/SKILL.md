@@ -490,7 +490,7 @@ What this step owns is the part `/doctor` does not do: read the [Claude Code cha
 
 ## Proposal Bar
 
-**The default is no change.** A setup that works should not be churned month to month. Report everything the checks find, but propose only what clears this bar:
+**The default is no change, once your setup is stable.** A setup that works should not be churned month to month. In the first months, while you are still building it out, Adopt and Improve can run longer; tighten to this bar when the findings start to feel routine. Report everything the checks find, but propose only what clears this bar:
 
 - **An action needs a reason it is costing something now:** security, something broken, or a Stats row past its threshold. "Could be cleaner", a best practice from an article, or a tidier structure goes to **Parked**, not Adopt or Improve.
 - **No restructures** (moving content between layers, renaming or merging skills, splitting CLAUDE.md) unless something is broken.
