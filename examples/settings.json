@@ -1,5 +1,7 @@
 {
   "model": "opus",
+  "fastMode": true,
+  "effortLevel": "xhigh",
   "hooks": {
     "PreToolUse": [
       {
@@ -112,6 +114,5 @@
   "skipWorkflowUsageWarning": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
-  "effortLevel": "xhigh"
+  "voiceEnabled": true
 }
